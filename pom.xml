@@ -4,23 +4,135 @@
 
     <groupId>be.scoutsronse.wafelbak</groupId>
     <artifactId>Wafelbak</artifactId>
-    <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <version>DEV-SNAPSHOT</version>
 
     <name>Wafelbak</name>
-    <url>http://www.scoutsronse.be</url>
+    <description>Wafelbak organiser</description>
+
+    <organization>
+        <name>Scouts Ronse</name>
+        <url>http://www.scoutsronse.be</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <name>Dhondt Maarten</name>
+            <id>1991041705341</id>
+        </developer>
+    </developers>
+
+    <properties>
+        <java.build.version>1.8</java.build.version>
+
+        <spring.version>4.3.3.RELEASE</spring.version>
+        <hibernate.version>5.2.2.Final</hibernate.version>
+        <h2.version>1.4.192</h2.version>
+        <junit.version>4.12</junit.version>
+        <log4j.version>2.7</log4j.version>
+        <guava.version>20.0-rc1</guava.version>
+        <typetools.version>0.4.8</typetools.version>
+    </properties>
+
+    <modules>
+        <module>application</module>
+        <module>entity</module>
+        <module>model-view-presenter</module>
+        <module>repository</module>
+        <module>repository-api</module>
+        <module>misc</module>
+    </modules>
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>4.3.2.RELEASE</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>application</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>entity</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>model-view-presenter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>repository-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>repository</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>misc</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-orm</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.jodah</groupId>
+                <artifactId>typetools</artifactId>
+                <version>${typetools.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>${java.build.version}</source>
+                    <target>${java.build.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
