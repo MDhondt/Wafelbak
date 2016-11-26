@@ -11,7 +11,7 @@ public abstract class IndexedBaseRepository<Entity, Index extends be.scoutsronse
     @Override
     public void save(Entity entity) {
         super.save(entity);
-        index().save(entity);
+//        index().save(entity);
     }
 
     @Override

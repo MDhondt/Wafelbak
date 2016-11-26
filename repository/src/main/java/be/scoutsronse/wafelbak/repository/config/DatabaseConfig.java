@@ -1,43 +1,51 @@
 package be.scoutsronse.wafelbak.repository.config;
 
 import be.scoutsronse.wafelbak.repository.db.EventPostingJpaTransactionManager;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import net.ttddyy.dsproxy.listener.SLF4JQueryLoggingListener;
+import net.ttddyy.dsproxy.support.ProxyDataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
-import javax.annotation.Resource;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.util.Properties;
+
+import static org.hibernate.dialect.Dialect.DEFAULT_BATCH_SIZE;
 
 @Configuration
-@PropertySource("classpath:application.properties")
 public class DatabaseConfig {
 
-    private static final String PROP_DATABASE_DRIVER = "db.driver";
-    private static final String PROP_DATABASE_PASSWORD = "db.password";
-    private static final String PROP_DATABASE_URL = "db.url";
-    private static final String PROP_DATABASE_USERNAME = "db.username";
-
-    @Resource
-    private Environment environment;
-
     @Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+    public DataSource sqlLoggingProxyDataSource() {
+        SLF4JQueryLoggingListener loggingListener = new SLF4JQueryLoggingListener();
+        loggingListener.setQueryLogEntryCreator(new InlineQueryLogEntryCreator());
+        System.setProperty("org.slf4j.impl.SimpleLogger.defaultLogLevel", "trace");
 
-        dataSource.setDriverClassName(environment.getRequiredProperty(PROP_DATABASE_DRIVER));
-        dataSource.setUrl(environment.getRequiredProperty(PROP_DATABASE_URL));
-        dataSource.setUsername(environment.getRequiredProperty(PROP_DATABASE_USERNAME));
-        dataSource.setPassword(environment.getRequiredProperty(PROP_DATABASE_PASSWORD));
+        return ProxyDataSourceBuilder
+                .create(hikariConnectionPoolingDataSource())
+                .name("ProxyDataSource")
+                .listener(loggingListener)
+                .build();
+    }
 
-        return dataSource;
+    private DataSource hikariConnectionPoolingDataSource() {
+        HikariConfig config = new HikariConfig();
+
+        config.setDriverClassName("org.h2.Driver");
+        config.setJdbcUrl("jdbc:h2:~/WafelbakDb");
+        config.setUsername("sa");
+        config.setPassword("sa");
+        config.setMaximumPoolSize(200);
+        config.setRegisterMbeans(true);
+
+        return new HikariDataSource(config);
     }
 
     @Bean
@@ -46,7 +54,14 @@ public class DatabaseConfig {
         lcemfb.setDataSource(dataSource);
         lcemfb.setJpaVendorAdapter(jpaVendorAdapter);
         lcemfb.setPackagesToScan("be.scoutsronse.wafelbak");
+        lcemfb.setJpaProperties(additionalProperties());
         return lcemfb;
+    }
+
+    private Properties additionalProperties() {
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.jdbc.batch_size", DEFAULT_BATCH_SIZE);
+        return properties;
     }
 
     @Bean
@@ -54,7 +69,6 @@ public class DatabaseConfig {
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         adapter.setDatabase(Database.H2);
         adapter.setGenerateDdl(true);
-        adapter.setShowSql(true);
         return adapter;
     }
 

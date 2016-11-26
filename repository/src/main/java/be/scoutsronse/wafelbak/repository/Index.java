@@ -3,8 +3,8 @@ package be.scoutsronse.wafelbak.repository;
 import be.scoutsronse.wafelbak.repository.db.TransactionRollbacked;
 import be.scoutsronse.wafelbak.tech.event.ApplicationStarted;
 import com.google.common.eventbus.Subscribe;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.util.Collection;
 import java.util.concurrent.ExecutorService;

@@ -29,7 +29,6 @@ public class WafelbakView extends View<WafelbakPresenter> {
         Button button = new Button();
         button.setText("Test DB");
         button.setOnAction(event -> {
-            System.out.println("Testing");
             Street street = new Street();
             street.setName("Croix ou Pile");
             presenter().persist(street);

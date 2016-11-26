@@ -1,8 +1,8 @@
 package be.scoutsronse.wafelbak.repository.db;
 
 import be.scoutsronse.wafelbak.tech.event.eventbus.EventBus;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.orm.jpa.JpaTransactionManager;
