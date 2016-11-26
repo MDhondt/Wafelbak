@@ -23,6 +23,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="repository-api" />
     <orderEntry type="module" module-name="entity" />
+    <orderEntry type="library" name="Maven: org.hibernate:hibernate-java8:5.2.2.Final" level="project" />
     <orderEntry type="module" module-name="misc" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:4.3.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aop:4.3.3.RELEASE" level="project" />

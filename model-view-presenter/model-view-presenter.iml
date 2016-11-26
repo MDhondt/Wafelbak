@@ -35,6 +35,7 @@
     <orderEntry type="library" name="Maven: javax.el:el-api:2.2" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.spec.javax.interceptor:jboss-interceptors-api_1.1_spec:1.0.0.Beta1" level="project" />
     <orderEntry type="library" name="Maven: javax.annotation:jsr250-api:1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.hibernate:hibernate-java8:5.2.2.Final" level="project" />
     <orderEntry type="module" module-name="misc" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:20.0-rc1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:4.3.3.RELEASE" level="project" />
