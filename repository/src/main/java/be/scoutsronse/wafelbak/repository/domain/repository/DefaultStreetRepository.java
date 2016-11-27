@@ -1,6 +1,6 @@
 package be.scoutsronse.wafelbak.repository.domain.repository;
 
-import be.scoutsronse.wafelbak.entity.Street;
+import be.scoutsronse.wafelbak.domain.entity.Street;
 import be.scoutsronse.wafelbak.repository.IndexedBaseRepository;
 import be.scoutsronse.wafelbak.repository.api.StreetRepository;
 import be.scoutsronse.wafelbak.repository.domain.index.StreetIndex;

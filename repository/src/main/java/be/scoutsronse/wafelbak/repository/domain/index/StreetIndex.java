@@ -1,6 +1,6 @@
 package be.scoutsronse.wafelbak.repository.domain.index;
 
-import be.scoutsronse.wafelbak.entity.Street;
+import be.scoutsronse.wafelbak.domain.entity.Street;
 import be.scoutsronse.wafelbak.repository.Index;
 
 import java.util.Collection;

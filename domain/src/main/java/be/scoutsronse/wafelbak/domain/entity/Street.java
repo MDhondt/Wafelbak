@@ -1,14 +1,14 @@
-package be.scoutsronse.wafelbak.entity;
+package be.scoutsronse.wafelbak.domain.entity;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "STRAAT", uniqueConstraints = {@UniqueConstraint(name = "STRAATNAAM_UNIQUE", columnNames = {"STRAATNAAM"})})
+@Table(uniqueConstraints = {@UniqueConstraint(name = "NAME_UNIQUE", columnNames = {"name", "cluster"})})
 public class Street extends AbstractEntity {
 
-    @Column(name = "STRAATNAAM", nullable = false)
+    @Column(nullable = false)
     private String name;
-    @Column(name = "AANTAL_HUIZEN")
+    @Column
     private Integer numberOfHouses;
     @ManyToOne
     private Cluster cluster;

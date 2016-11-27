@@ -1,7 +1,6 @@
 package be.scoutsronse.wafelbak.mvp.domain.presenter;
 
-
-import be.scoutsronse.wafelbak.entity.Street;
+import be.scoutsronse.wafelbak.domain.entity.Street;
 import be.scoutsronse.wafelbak.mvp.Presenter;
 import be.scoutsronse.wafelbak.mvp.domain.model.WafelbakModel;
 import be.scoutsronse.wafelbak.mvp.domain.view.WafelbakView;

@@ -1,4 +1,4 @@
-package be.scoutsronse.wafelbak.entity;
+package be.scoutsronse.wafelbak.domain.entity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

@@ -1,6 +1,6 @@
 package be.scoutsronse.wafelbak.mvp.domain.view;
 
-import be.scoutsronse.wafelbak.entity.Street;
+import be.scoutsronse.wafelbak.domain.entity.Street;
 import be.scoutsronse.wafelbak.mvp.View;
 import be.scoutsronse.wafelbak.mvp.domain.presenter.WafelbakPresenter;
 import javafx.scene.Scene;
