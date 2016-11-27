@@ -6,21 +6,21 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "VERKOOP")
+@Table
 public class Sale extends AbstractEntity {
 
-    @Column(name = "AANTAL")
+    @Column
     private Integer amount;
     @ManyToMany
     private Set<Street> streets;
-    @Column(name = "VERKOPER")
+    @Column
     private String salesMan;
     @ElementCollection
     private List<String> salesTeam;
-    @Column(name = "CONTACT_INFO")
+    @Column
     private String contact;
-    @Column(name = "START", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime start;
-    @Column(name = "EINDE")
+    @Column
     private LocalDateTime end;
 }

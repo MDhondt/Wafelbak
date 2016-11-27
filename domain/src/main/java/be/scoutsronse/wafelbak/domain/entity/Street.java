@@ -3,7 +3,7 @@ package be.scoutsronse.wafelbak.domain.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(name = "NAME_UNIQUE", columnNames = {"name", "cluster"})})
+@Table(uniqueConstraints = {@UniqueConstraint(name = "NAME_UNIQUE", columnNames = {"name", "cluster_id"})})
 public class Street extends AbstractEntity {
 
     @Column(nullable = false)

@@ -9,7 +9,7 @@ import java.util.Collection;
 import static javax.persistence.EnumType.STRING;
 
 @Entity
-@Table(name = "CLUSTER")
+@Table
 public class Cluster extends AbstractEntity {
 
     @OneToMany(mappedBy = "cluster")

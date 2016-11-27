@@ -26,7 +26,6 @@ public class DatabaseConfig {
     public DataSource sqlLoggingProxyDataSource() {
         SLF4JQueryLoggingListener loggingListener = new SLF4JQueryLoggingListener();
         loggingListener.setQueryLogEntryCreator(new InlineQueryLogEntryCreator());
-        System.setProperty("org.slf4j.impl.SimpleLogger.defaultLogLevel", "trace");
 
         return ProxyDataSourceBuilder
                 .create(hikariConnectionPoolingDataSource())
