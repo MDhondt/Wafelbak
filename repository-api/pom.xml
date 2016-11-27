@@ -13,7 +13,7 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>entity</artifactId>
+            <artifactId>domain</artifactId>
         </dependency>
     </dependencies>
 </project>

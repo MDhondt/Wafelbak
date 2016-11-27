@@ -8,7 +8,7 @@
         <version>DEV-SNAPSHOT</version>
     </parent>
 
-    <artifactId>entity</artifactId>
+    <artifactId>domain</artifactId>
 
     <dependencies>
         <dependency>

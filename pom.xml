@@ -38,7 +38,7 @@
 
     <modules>
         <module>application</module>
-        <module>entity</module>
+        <module>domain</module>
         <module>model-view-presenter</module>
         <module>repository</module>
         <module>repository-api</module>
@@ -72,7 +72,7 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>entity</artifactId>
+                <artifactId>domain</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
