@@ -23,4 +23,6 @@ public class Sale extends AbstractEntity {
     private LocalDateTime start;
     @Column
     private LocalDateTime end;
+    @Column
+    private Float money;
 }
