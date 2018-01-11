@@ -35,6 +35,7 @@
         <datasource.proxy.version>1.3.3</datasource.proxy.version>
         <hikaricp.version>2.5.1</hikaricp.version>
         <mapjfx.version>1.14.0</mapjfx.version>
+        <controlsfx.version>8.40.14</controlsfx.version>
     </properties>
 
     <modules>
@@ -146,6 +147,11 @@
                 <groupId>com.sothawo</groupId>
                 <artifactId>mapjfx</artifactId>
                 <version>${mapjfx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.controlsfx</groupId>
+                <artifactId>controlsfx</artifactId>
+                <version>${controlsfx.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
