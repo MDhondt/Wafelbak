@@ -34,15 +34,16 @@
         <typetools.version>0.4.8</typetools.version>
         <datasource.proxy.version>1.3.3</datasource.proxy.version>
         <hikaricp.version>2.5.1</hikaricp.version>
+        <mapjfx.version>1.14.0</mapjfx.version>
     </properties>
 
     <modules>
         <module>application</module>
         <module>domain</module>
+        <module>misc</module>
         <module>model-view-presenter</module>
         <module>repository</module>
         <module>repository-api</module>
-        <module>misc</module>
     </modules>
 
     <dependencies>
@@ -140,6 +141,11 @@
                 <groupId>com.zaxxer</groupId>
                 <artifactId>HikariCP</artifactId>
                 <version>${hikaricp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sothawo</groupId>
+                <artifactId>mapjfx</artifactId>
+                <version>${mapjfx.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
