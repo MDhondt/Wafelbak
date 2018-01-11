@@ -32,7 +32,6 @@ public abstract class Index<Entity> {
     }
 
     public synchronized void delete(Entity entity) {
-        Entity existing = findExisting(entity);
         if (contains(entity)) {
             doDelete(findExisting(entity));
         }
@@ -52,11 +51,11 @@ public abstract class Index<Entity> {
         }
     }
 
-    protected synchronized boolean isInitialized() {
+    private synchronized boolean isInitialized() {
         return initialized;
     }
 
-    public void initializeAsynchronously() {
+    private void initializeAsynchronously() {
         indexLoader.execute(this::initialize);
     }
 

@@ -6,8 +6,13 @@ import be.scoutsronse.wafelbak.repository.api.StreetRepository;
 import be.scoutsronse.wafelbak.repository.domain.index.StreetIndex;
 import org.springframework.stereotype.Repository;
 
+import javax.inject.Inject;
+
 @Repository
 public class DefaultStreetRepository extends IndexedBaseRepository<Street, StreetIndex> implements StreetRepository {
+
+    @Inject
+    private StreetIndex index;
 
     @Override
     public void save(Street street) {
@@ -16,6 +21,6 @@ public class DefaultStreetRepository extends IndexedBaseRepository<Street, Stree
 
     @Override
     protected StreetIndex index() {
-        return null;
+        return index;
     }
 }

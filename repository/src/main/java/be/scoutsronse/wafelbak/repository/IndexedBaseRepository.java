@@ -1,8 +1,8 @@
 package be.scoutsronse.wafelbak.repository;
 
-import be.scoutsronse.wafelbak.tech.stacktrace.StackTraceUtils;
-
 import java.util.Collection;
+
+import static be.scoutsronse.wafelbak.tech.stacktrace.StackTraceUtils.calledBy;
 
 public abstract class IndexedBaseRepository<Entity, Index extends be.scoutsronse.wafelbak.repository.Index<Entity>> extends BaseRepositoryImpl<Entity> {
 
@@ -11,7 +11,7 @@ public abstract class IndexedBaseRepository<Entity, Index extends be.scoutsronse
     @Override
     public void save(Entity entity) {
         super.save(entity);
-//        index().save(entity);
+        index().save(entity);
     }
 
     @Override
@@ -29,6 +29,6 @@ public abstract class IndexedBaseRepository<Entity, Index extends be.scoutsronse
 
     @Override
     public Collection<Entity> findAll() {
-        return StackTraceUtils.calledBy(index().getClass()) ? super.findAll() : index().findAll();
+        return calledBy(index().getClass()) ? super.findAll() : index().findAll();
     }
 }

@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 import javax.persistence.EntityManagerFactory;
@@ -18,6 +17,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 import static org.hibernate.dialect.Dialect.DEFAULT_BATCH_SIZE;
+import static org.springframework.orm.jpa.vendor.Database.H2;
 
 @Configuration
 public class DatabaseConfig {
@@ -39,9 +39,9 @@ public class DatabaseConfig {
 
         config.setDriverClassName("org.h2.Driver");
         config.setJdbcUrl("jdbc:h2:~/WafelbakDb");
-        config.setUsername("sa");
-        config.setPassword("sa");
-        config.setMaximumPoolSize(200);
+        config.setUsername("admin");
+        config.setPassword("admin");
+        config.setMaximumPoolSize(5);
         config.setRegisterMbeans(true);
 
         return new HikariDataSource(config);
@@ -66,7 +66,7 @@ public class DatabaseConfig {
     @Bean
     public JpaVendorAdapter jpaVendorAdapter() {
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
-        adapter.setDatabase(Database.H2);
+        adapter.setDatabase(H2);
         adapter.setGenerateDdl(true);
         return adapter;
     }

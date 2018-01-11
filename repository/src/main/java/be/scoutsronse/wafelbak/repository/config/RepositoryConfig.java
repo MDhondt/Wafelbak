@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@ComponentScan("be.scoutsronse.wafelbak.repository.domain.repository")
+@ComponentScan("be.scoutsronse.wafelbak.repository.domain")
 @EnableTransactionManagement
 public class RepositoryConfig {
 }

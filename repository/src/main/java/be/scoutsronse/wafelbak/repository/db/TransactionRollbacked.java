@@ -8,7 +8,7 @@ public class TransactionRollbacked {
         this.readOnly = readOnly;
     }
 
-    public static TransactionRollbacked transactionRollbacked(boolean readOnly) {
+    static TransactionRollbacked transactionRollbacked(boolean readOnly) {
         return new TransactionRollbacked(readOnly);
     }
 

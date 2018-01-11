@@ -10,6 +10,8 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
 
 import javax.persistence.EntityManagerFactory;
 
+import static be.scoutsronse.wafelbak.repository.db.TransactionRollbacked.transactionRollbacked;
+
 public class EventPostingJpaTransactionManager extends JpaTransactionManager implements ApplicationListener<ContextRefreshedEvent> {
 
     private static final Logger LOGGER = LogManager.getLogger(EventPostingJpaTransactionManager.class);
@@ -27,7 +29,7 @@ public class EventPostingJpaTransactionManager extends JpaTransactionManager imp
         } catch (Exception e) {
             LOGGER.error("Problem occured while rollbacking.", e);
         } finally {
-            eventBus.post(TransactionRollbacked.transactionRollbacked(status.isReadOnly()));
+            eventBus.post(transactionRollbacked(status.isReadOnly()));
         }
     }
 

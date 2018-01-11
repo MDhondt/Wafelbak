@@ -1,7 +1,6 @@
-package be.scoutsronse.wafelbak.mvp.domain.model;
+package be.scoutsronse.wafelbak.mvp.domain.main;
 
 import be.scoutsronse.wafelbak.mvp.Model;
-import be.scoutsronse.wafelbak.mvp.domain.view.WafelbakView;
 
 public class WafelbakModel extends Model<WafelbakView> {
     public WafelbakModel(WafelbakView view) {

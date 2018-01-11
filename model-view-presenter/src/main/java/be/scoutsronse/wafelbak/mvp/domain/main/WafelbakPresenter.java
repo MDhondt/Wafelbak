@@ -1,9 +1,7 @@
-package be.scoutsronse.wafelbak.mvp.domain.presenter;
+package be.scoutsronse.wafelbak.mvp.domain.main;
 
 import be.scoutsronse.wafelbak.domain.entity.Street;
 import be.scoutsronse.wafelbak.mvp.Presenter;
-import be.scoutsronse.wafelbak.mvp.domain.model.WafelbakModel;
-import be.scoutsronse.wafelbak.mvp.domain.view.WafelbakView;
 import be.scoutsronse.wafelbak.repository.api.StreetRepository;
 import org.springframework.stereotype.Component;
 
@@ -17,5 +15,10 @@ public class WafelbakPresenter extends Presenter<WafelbakModel, WafelbakView> {
 
     public void persist(Street street) {
         streetRepository.save(street);
+    }
+
+    public void test() {
+        System.out.println(streetRepository.findAll());
+        System.out.println("testing");
     }
 }
