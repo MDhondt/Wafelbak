@@ -2,6 +2,7 @@ package be.scoutsronse.wafelbak.mvp;
 
 import org.springframework.context.MessageSource;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.lang.reflect.InvocationTargetException;
 
@@ -17,11 +18,16 @@ public abstract class Presenter<MODEL extends Model<VIEW>, VIEW extends View<? e
 
     public Presenter() {
         try {
-            view = ((Class<VIEW>) getActualTypeArguments(this.getClass())[1]).getDeclaredConstructor(getClass(), MessageSource.class).newInstance(this, messageSource);
+            view = ((Class<VIEW>) getActualTypeArguments(this.getClass())[1]).getDeclaredConstructor(getClass()).newInstance(this);
             model = ((Class<MODEL>) getActualTypeArguments(this.getClass())[0]).getDeclaredConstructor((Class<VIEW>) getActualTypeArguments(this.getClass())[1]).newInstance(view);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }
+    }
+
+    @PostConstruct
+    public void setMessageSource() {
+        view.setMessageSource(messageSource);
     }
 
     public MODEL model() {

@@ -27,8 +27,8 @@ public class WafelbakView extends View<WafelbakPresenter> {
     private MapView mapView;
     private BorderPane borderPane;
 
-    public WafelbakView(WafelbakPresenter presenter, MessageSource messageSource) {
-        super(presenter, messageSource);
+    public WafelbakView(WafelbakPresenter presenter) {
+        super(presenter);
     }
 
     public void show() {
@@ -67,14 +67,13 @@ public class WafelbakView extends View<WafelbakPresenter> {
         TableView table = new TableView();
         streetOverview.getChildren().addAll(table);
 
-        return new TitledPane("title", streetOverview);
-//        return new TitledPane(messageSource().getMessage("STREET_OVERVIEW_TITLE", null, null), streetOverview);
+        return new TitledPane(message("STREET_OVERVIEW_TITLE"), streetOverview);
     }
 
     private TitledPane createStartSale() {
         VBox startSale = new VBox();
 
-        return new TitledPane("start sale", startSale);
+        return new TitledPane(message("START_SALE_TITLE"), startSale);
     }
 
     private MapView createMapView() {
