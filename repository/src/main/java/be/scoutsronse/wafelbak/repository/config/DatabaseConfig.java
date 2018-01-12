@@ -38,7 +38,7 @@ public class DatabaseConfig {
         HikariConfig config = new HikariConfig();
 
         config.setDriverClassName("org.h2.Driver");
-        config.setJdbcUrl("jdbc:h2:~/WafelbakDb");
+        config.setJdbcUrl("jdbc:h2:~/Wafelbak/db/WafelbakDb");
         config.setUsername("admin");
         config.setPassword("admin");
         config.setMaximumPoolSize(5);
