@@ -1,6 +1,7 @@
 package be.scoutsronse.wafelbak.mvp;
 
 import org.springframework.context.MessageSource;
+import be.scoutsronse.wafelbak.mvp.i18n.i18n;
 
 import java.util.Locale;
 
@@ -18,8 +19,8 @@ public abstract class View<PRESENTER extends Presenter<? extends Model<? extends
         return presenter;
     }
 
-    protected String message(String property, Object... args) {
-        return messageSource.getMessage(property, args, locale);
+    protected String message(i18n property, Object... args) {
+        return messageSource.getMessage(property.name(), args, locale);
     }
 
     void setMessageSource(MessageSource messageSource) {

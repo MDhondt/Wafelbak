@@ -36,7 +36,7 @@ import static javafx.stage.StageStyle.DECORATED;
 public class Wafelbak extends Application {
 
     private Image splash = new Image("/img/logo.png");
-    private Image icon = new Image("/img/icon.png");
+    private Image icon = new Image("/img/ico.png");
 
     private Pane splashLayout;
     private ProgressBar loadProgress;
