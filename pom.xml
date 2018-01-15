@@ -36,6 +36,7 @@
         <hikaricp.version>2.5.1</hikaricp.version>
         <mapjfx.version>1.14.0</mapjfx.version>
         <controlsfx.version>8.40.14</controlsfx.version>
+        <jts.version>1.13</jts.version>
     </properties>
 
     <modules>
@@ -43,6 +44,7 @@
         <module>domain</module>
         <module>misc</module>
         <module>model-view-presenter</module>
+        <module>osm</module>
         <module>repository</module>
         <module>repository-api</module>
     </modules>
@@ -79,7 +81,22 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>map</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>misc</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>model-view-presenter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>osm</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -90,11 +107,6 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>repository</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>misc</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -152,6 +164,11 @@
                 <groupId>org.controlsfx</groupId>
                 <artifactId>controlsfx</artifactId>
                 <version>${controlsfx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.vividsolutions</groupId>
+                <artifactId>jts</artifactId>
+                <version>${jts.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

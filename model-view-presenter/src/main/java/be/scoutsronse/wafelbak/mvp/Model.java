@@ -13,6 +13,5 @@ public abstract class Model<VIEW extends View<? extends Presenter<? extends Mode
         return view;
     }
 
-    protected void bindViewToModel() {
-    }
+    protected abstract void bindViewToModel();
 }

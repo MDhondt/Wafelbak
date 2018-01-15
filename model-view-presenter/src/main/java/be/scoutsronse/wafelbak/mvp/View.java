@@ -19,7 +19,7 @@ public abstract class View<PRESENTER extends Presenter<? extends Model<? extends
         return presenter;
     }
 
-    protected String message(i18n property, Object... args) {
+    public String message(i18n property, Object... args) {
         return messageSource.getMessage(property.name(), args, locale);
     }
 

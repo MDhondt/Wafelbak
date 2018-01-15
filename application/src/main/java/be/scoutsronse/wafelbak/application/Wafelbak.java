@@ -1,6 +1,6 @@
 package be.scoutsronse.wafelbak.application;
 
-import be.scoutsronse.wafelbak.mvp.domain.main.WafelbakPresenter;
+import be.scoutsronse.wafelbak.mvp.main.WafelbakPresenter;
 import be.scoutsronse.wafelbak.tech.event.eventbus.AsynchronousEventBus;
 import be.scoutsronse.wafelbak.tech.event.eventbus.PrioritizedEventBus;
 import be.scoutsronse.wafelbak.tech.event.eventbus.Subscribe;
