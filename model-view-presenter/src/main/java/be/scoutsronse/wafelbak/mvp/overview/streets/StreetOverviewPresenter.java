@@ -14,7 +14,9 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.Optional.ofNullable;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.*;
 
 @Component
 public class StreetOverviewPresenter extends Presenter<StreetOverviewModel, StreetOverviewView> {
@@ -30,11 +32,13 @@ public class StreetOverviewPresenter extends Presenter<StreetOverviewModel, Stre
     void initStreets() {
         OSM ronse = osmService.getRonse();
         Map<Way, CoordinateLine> streetsOfRonse = osmUtils.getStreetsOfRonse(ronse);
-        List<StreetDto> streetDtosOfRonse = streetsOfRonse.entrySet().stream().map(entry -> new StreetDto(entry.getKey(), entry.getValue())).collect(toList());
+        Map<CoordinateLine, Way> streetsByLine = streetsOfRonse.keySet().stream().collect(toMap(streetsOfRonse::get, identity()));
+        Map<String, List<CoordinateLine>> streetsByName = streetsOfRonse.values().stream().collect(groupingBy(street -> ofNullable(streetsByLine.get(street).tags()).map(tags -> tags.get("name")).orElse("Unknown name")));
+        List<StreetDto> streetDtosOfRonse = streetsByName.entrySet().stream().map(entry -> new StreetDto(entry.getKey(), entry.getValue())).collect(toList());
         model().setStreets(streetDtosOfRonse);
     }
 
-    public void selectStreet(CoordinateLine coordinateLine) {
-        mapPresenter.selectStreet(coordinateLine);
+    public void selectStreets(List<CoordinateLine> coordinateLines) {
+        mapPresenter.selectStreets(coordinateLines);
     }
 }

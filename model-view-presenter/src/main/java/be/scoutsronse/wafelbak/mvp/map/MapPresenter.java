@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.util.List;
 
 @Component
 public class MapPresenter extends Presenter<MapModel, MapView> {
@@ -19,7 +20,7 @@ public class MapPresenter extends Presenter<MapModel, MapView> {
         model().setBorderOfRonse(osmUtils.borderOfRonse());
     }
 
-    public void selectStreet(CoordinateLine selectedStreet) {
-        model().setSelectedStreet(selectedStreet);
+    public void selectStreets(List<CoordinateLine> selectedStreets) {
+        model().setSelectedStreets(selectedStreets);
     }
 }

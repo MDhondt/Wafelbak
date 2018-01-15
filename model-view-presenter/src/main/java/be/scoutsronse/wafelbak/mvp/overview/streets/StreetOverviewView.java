@@ -24,7 +24,7 @@ public class StreetOverviewView extends View<StreetOverviewPresenter> {
             @Override
             public void changed(ObservableValue<? extends StreetDto> observable, StreetDto oldValue, StreetDto newValue) {
                 if (newValue != null) {
-                    presenter().selectStreet(newValue.coordinateLine());
+                    presenter().selectStreets(newValue.coordinateLines());
                 }
             }
         });

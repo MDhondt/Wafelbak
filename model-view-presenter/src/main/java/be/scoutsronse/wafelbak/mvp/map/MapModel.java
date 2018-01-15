@@ -2,6 +2,11 @@ package be.scoutsronse.wafelbak.mvp.map;
 
 import be.scoutsronse.wafelbak.mvp.Model;
 import com.sothawo.mapjfx.CoordinateLine;
+import com.sothawo.mapjfx.Extent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static javafx.scene.paint.Color.BLUE;
 import static javafx.scene.paint.Color.RED;
@@ -9,7 +14,7 @@ import static javafx.scene.paint.Color.RED;
 public class MapModel extends Model<MapView> {
 
     private CoordinateLine borderOfRonse;
-    private CoordinateLine selectedStreet;
+    private List<CoordinateLine> selectedStreets = new ArrayList<>();
 
     public MapModel(MapView view) {
         super(view);
@@ -28,13 +33,20 @@ public class MapModel extends Model<MapView> {
         this.borderOfRonse = borderOfRonse;
     }
 
-    void setSelectedStreet(CoordinateLine selectedStreet) {
-        if (this.selectedStreet != null) {
-            view().getMap().removeCoordinateLine(this.selectedStreet);
+    void setSelectedStreets(List<CoordinateLine> selectedStreets) {
+        if (!this.selectedStreets.isEmpty()) {
+            for (CoordinateLine street : this.selectedStreets) {
+                view().getMap().removeCoordinateLine(street);
+            }
         }
-        this.selectedStreet = selectedStreet;
-        selectedStreet.setColor(BLUE);
-        view().getMap().addCoordinateLine(selectedStreet);
-        selectedStreet.setVisible(true);
+        this.selectedStreets.clear();
+        for (CoordinateLine selectedStreet : selectedStreets) {
+            selectedStreet.setColor(BLUE);
+            view().getMap().addCoordinateLine(selectedStreet);
+            selectedStreet.setVisible(true);
+            this.selectedStreets.add(selectedStreet);
+        }
+        Extent extent = Extent.forCoordinates(selectedStreets.stream().flatMap(CoordinateLine::getCoordinateStream).collect(Collectors.toList()));
+        view().getMap().setExtent(extent);
     }
 }
