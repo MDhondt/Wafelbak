@@ -2,11 +2,9 @@ package be.scoutsronse.wafelbak.mvp.map;
 
 import be.scoutsronse.wafelbak.mvp.Model;
 import com.sothawo.mapjfx.CoordinateLine;
-import com.sothawo.mapjfx.Extent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static javafx.scene.paint.Color.BLUE;
 import static javafx.scene.paint.Color.RED;
@@ -46,7 +44,5 @@ public class MapModel extends Model<MapView> {
             selectedStreet.setVisible(true);
             this.selectedStreets.add(selectedStreet);
         }
-        Extent extent = Extent.forCoordinates(selectedStreets.stream().flatMap(CoordinateLine::getCoordinateStream).collect(Collectors.toList()));
-        view().getMap().setExtent(extent);
     }
 }

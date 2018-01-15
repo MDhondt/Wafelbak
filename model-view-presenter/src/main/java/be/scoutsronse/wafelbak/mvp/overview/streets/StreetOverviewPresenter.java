@@ -34,7 +34,7 @@ public class StreetOverviewPresenter extends Presenter<StreetOverviewModel, Stre
         Map<Way, CoordinateLine> streetsOfRonse = osmUtils.getStreetsOfRonse(ronse);
         Map<CoordinateLine, Way> streetsByLine = streetsOfRonse.keySet().stream().collect(toMap(streetsOfRonse::get, identity()));
         Map<String, List<CoordinateLine>> streetsByName = streetsOfRonse.values().stream().collect(groupingBy(street -> ofNullable(streetsByLine.get(street).tags()).map(tags -> tags.get("name")).orElse("Unknown name")));
-        List<StreetDto> streetDtosOfRonse = streetsByName.entrySet().stream().map(entry -> new StreetDto(entry.getKey(), entry.getValue())).collect(toList());
+        List<StreetDto> streetDtosOfRonse = streetsByName.entrySet().stream().filter(entry -> entry.getValue().stream().flatMap(CoordinateLine::getCoordinateStream).count() > 2L).map(entry -> new StreetDto(entry.getKey(), entry.getValue())).collect(toList());
         model().setStreets(streetDtosOfRonse);
     }
 
