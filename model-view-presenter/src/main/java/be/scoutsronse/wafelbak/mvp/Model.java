@@ -6,12 +6,9 @@ public abstract class Model<VIEW extends View<? extends Presenter<? extends Mode
 
     public Model(VIEW view) {
         this.view = view;
-        bindViewToModel();
     }
 
     protected VIEW view() {
         return view;
     }
-
-    protected abstract void bindViewToModel();
 }

@@ -12,21 +12,18 @@ import static javafx.collections.FXCollections.observableArrayList;
 
 public class StreetOverviewModel extends Model<StreetOverviewView> {
 
-    private static StringProperty title = new SimpleStringProperty();
-    private static ObservableList<StreetDto> streets = observableArrayList();
+    private StringProperty title = new SimpleStringProperty();
+    private ObservableList<StreetDto> streets = observableArrayList();
 
     public StreetOverviewModel(StreetOverviewView view) {
         super(view);
     }
 
-    @Override
-    protected void bindViewToModel() {
-        view().streetOverviewTable().setItems(streets);
+    public void bindViewToModel(List<StreetDto> streets) {
+        view().streetOverviewTable().setItems(this.streets);
         view().titleProperty().bind(title);
-    }
 
-    void setStreets(List<StreetDto> streets) {
-        this.streets.setAll(streets);
         title.setValue(view().message(STREET_OVERVIEW_TITLE));
+        this.streets.setAll(streets);
     }
 }

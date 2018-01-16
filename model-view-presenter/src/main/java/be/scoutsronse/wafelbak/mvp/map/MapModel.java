@@ -16,10 +16,6 @@ public class MapModel extends Model<MapView> {
 
     public MapModel(MapView view) {
         super(view);
-    }
-
-    @Override
-    protected void bindViewToModel() {
         view().getMap().initializedProperty().addListener((observable, oldValue, newValue) -> {
             borderOfRonse.setColor(RED);
             view().getMap().addCoordinateLine(borderOfRonse);
