@@ -31,7 +31,7 @@ public class MapView extends View<MapPresenter> {
         map.initializedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 map.setZoom(14);
-                map.setCenter(new Coordinate(50.749077, 3.599492));
+                map.setCenter(new Coordinate(50.748, 3.6078));
             }
         });
 
