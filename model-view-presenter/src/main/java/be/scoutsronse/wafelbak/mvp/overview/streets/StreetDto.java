@@ -8,8 +8,6 @@ import java.util.List;
 
 class StreetDto {
 
-    private static final String UNKNOWN_NAME = "Unknown name";
-
     private StringProperty name = new SimpleStringProperty();
     private List<CoordinateLine> coordinateLines;
 

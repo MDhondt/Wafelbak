@@ -29,6 +29,8 @@ import static java.util.Arrays.stream;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
+import static javafx.concurrent.Worker.State.CANCELLED;
+import static javafx.concurrent.Worker.State.FAILED;
 import static javafx.concurrent.Worker.State.SUCCEEDED;
 import static javafx.stage.Screen.getPrimary;
 import static javafx.stage.StageStyle.DECORATED;
@@ -67,6 +69,10 @@ public class Wafelbak extends Application {
                 initStage.hide();
 
                 startApplication();
+            } else if (newState == CANCELLED || newState == FAILED) {
+                loadProgress.progressProperty().unbind();
+                loadProgress.setProgress(0);
+                initStage.hide();
             }
         });
 

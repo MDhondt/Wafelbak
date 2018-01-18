@@ -12,6 +12,7 @@ public class StreetOverviewView extends View<StreetOverviewPresenter> {
 
     private TitledPane pane;
     private TableView<StreetDto> streetOverviewTable;
+    private TableView<ClusterData> overviewTable;
 
     public StreetOverviewView(StreetOverviewPresenter presenter) {
         super(presenter);
@@ -31,15 +32,23 @@ public class StreetOverviewView extends View<StreetOverviewPresenter> {
         pane.setContent(streetOverviewTable);
     }
 
+    private void createOverviewTable() {
+
+    }
+
     public TitledPane getPane() {
         return pane;
     }
 
-    TableView<StreetDto> streetOverviewTable() {
-        return streetOverviewTable;
-    }
-
     StringProperty titleProperty() {
         return pane.textProperty();
+    }
+
+    TableView<ClusterData> overviewTable() {
+        return overviewTable;
+    }
+
+    TableView<StreetDto> streetOverviewTable() {
+        return streetOverviewTable;
     }
 }
