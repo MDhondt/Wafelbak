@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.io.File;
 
+import static be.scoutsronse.wafelbak.osm.OSMParser.parse;
+
 @Component
 class OSMService implements OpenStreetMapService {
 
@@ -14,7 +16,7 @@ class OSMService implements OpenStreetMapService {
 
     @PostConstruct
     private void parseRonse() {
-        ronse = OSMParser.parse(ronseInput);
+        ronse = parse(ronseInput);
     }
 
     @Override

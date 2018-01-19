@@ -4,9 +4,11 @@ import be.scoutsronse.wafelbak.mvp.View;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TitledPane;
+import javafx.scene.layout.VBox;
 
 public class StreetOverviewView extends View<StreetOverviewPresenter> {
 
@@ -18,6 +20,7 @@ public class StreetOverviewView extends View<StreetOverviewPresenter> {
         super(presenter);
         pane = new TitledPane();
         streetOverviewTable = new TableView<>();
+        createOverviewTable();
         TableColumn<StreetDto, String> streetNameColumn = new TableColumn<>();
         streetNameColumn.setCellValueFactory(cellData -> cellData.getValue().name());
         streetOverviewTable.getColumns().add(streetNameColumn);
@@ -29,11 +32,19 @@ public class StreetOverviewView extends View<StreetOverviewPresenter> {
                 }
             }
         });
-        pane.setContent(streetOverviewTable);
+        Button button = new Button("persist");
+        button.setOnAction(event -> presenter().persist());
+        VBox vBox = new VBox();
+        vBox.getChildren().addAll(button, overviewTable, streetOverviewTable);
+        pane.setContent(vBox);
     }
 
     private void createOverviewTable() {
-
+        overviewTable = new TableView<>();
+        TableColumn<ClusterData, String> column = new TableColumn<>();
+        column.setCellValueFactory(cellData -> cellData.getValue().name());
+        overviewTable.getColumns().add(column);
+        overviewTable.getSortOrder().add(column);
     }
 
     public TitledPane getPane() {

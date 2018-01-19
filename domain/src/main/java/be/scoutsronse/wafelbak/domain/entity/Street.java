@@ -6,6 +6,7 @@ import be.scoutsronse.wafelbak.domain.id.WayId;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -24,6 +25,11 @@ public class Street extends AbstractEntity<StreetId> {
 
     private Street() {}
 
+    public Street(String name, Collection<WayId> osmWayIds) {
+        this.name = name;
+        this.osmWayIds.addAll(osmWayIds);
+    }
+
     @Override
     public StreetId id() {
         return aStreetId(id);
@@ -39,6 +45,10 @@ public class Street extends AbstractEntity<StreetId> {
 
     public Cluster cluster() {
         return cluster;
+    }
+
+    void setCluster(Cluster cluster) {
+        this.cluster = cluster;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package be.scoutsronse.wafelbak.mvp.main;
+package be.scoutsronse.wafelbak.mvp.util;
 
 import be.scoutsronse.wafelbak.osm.domain.Node;
 import be.scoutsronse.wafelbak.osm.domain.OSM;
@@ -28,7 +28,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 @Component
-public class OSMUtils {
+public class OpenStreetMapUtils {
 
     public Map<Way, CoordinateLine> getStreetsOfRonse(OSM ronse) {
         Map<Way, List<Coordinate>> coordinatesByWay = coordinatesByWay(ronse);

@@ -1,7 +1,7 @@
 package be.scoutsronse.wafelbak.mvp.map;
 
 import be.scoutsronse.wafelbak.mvp.Presenter;
-import be.scoutsronse.wafelbak.mvp.main.OSMUtils;
+import be.scoutsronse.wafelbak.mvp.util.OpenStreetMapUtils;
 import com.sothawo.mapjfx.CoordinateLine;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,7 @@ import java.util.List;
 public class MapPresenter extends Presenter<MapModel, MapView> {
 
     @Inject
-    private OSMUtils osmUtils;
+    private OpenStreetMapUtils osmUtils;
 
     @PostConstruct
     void initModel() {

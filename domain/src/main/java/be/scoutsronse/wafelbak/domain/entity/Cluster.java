@@ -9,18 +9,26 @@ import java.util.HashSet;
 import java.util.Objects;
 
 import static be.scoutsronse.wafelbak.domain.id.ClusterId.aClusterId;
+import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
 
 @Entity
 public class Cluster extends AbstractEntity<ClusterId> {
 
     private String name;
-    @OneToMany(fetch = EAGER)
+    @OneToMany(fetch = EAGER, cascade = PERSIST)
     private Collection<Street> streets;
     @OneToMany(fetch = EAGER)
     private Collection<ClusterState> states;
 
     private Cluster() {}
+
+    public Cluster(String name, Collection<Street> streets) {
+        this.name = name;
+        this.streets = new HashSet<>(streets);
+        this.states = new HashSet<>();
+        streets.forEach(street -> street.setCluster(this));
+    }
 
     @Override
     public ClusterId id() {

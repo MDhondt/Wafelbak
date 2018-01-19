@@ -47,28 +47,28 @@ public class Way {
         return ofNullable(tag).map(t -> t.stream().collect(toMap(Tag::key, Tag::value))).orElse(new HashMap<>());
     }
 
-    public Integer id() {
-        return id.intValueExact();
+    public Long id() {
+        return id.longValueExact();
     }
 
     public String user() {
         return user;
     }
 
-    public Integer uid() {
-        return uid.intValueExact();
+    public Long uid() {
+        return uid.longValueExact();
     }
 
     public Boolean visible() {
         return visible;
     }
 
-    public Integer version() {
-        return version.intValueExact();
+    public Long version() {
+        return version.longValueExact();
     }
 
-    public Integer changeSet() {
-        return changeset.intValueExact();
+    public Long changeSet() {
+        return changeset.longValueExact();
     }
 
     public LocalDateTime timestamp() {
