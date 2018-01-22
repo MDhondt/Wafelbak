@@ -2,24 +2,32 @@ package be.scoutsronse.wafelbak.mvp.overview.streets;
 
 import be.scoutsronse.wafelbak.domain.entity.Cluster;
 import be.scoutsronse.wafelbak.domain.id.ClusterId;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
-class ClusterData {
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static com.google.common.collect.Lists.newArrayList;
+
+class ClusterData extends ClusterItem {
 
     private ClusterId id;
-    private StringProperty name = new SimpleStringProperty();
+    private Collection<StreetData> streets = new ArrayList<>();
 
     ClusterData(Cluster cluster) {
+        super(cluster.name());
         id = cluster.id();
-        name.setValue(cluster.name());
     }
 
     ClusterId id() {
         return id;
     }
 
-    StringProperty name() {
-        return name;
+    void setStreets(Collection<StreetData> streetData) {
+        streets.clear();
+        streets.addAll(streetData);
+    }
+
+    public Collection<StreetData> streets() {
+        return newArrayList(streets);
     }
 }

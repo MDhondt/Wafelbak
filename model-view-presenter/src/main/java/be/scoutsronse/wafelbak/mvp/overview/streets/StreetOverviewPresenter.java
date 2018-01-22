@@ -2,6 +2,7 @@ package be.scoutsronse.wafelbak.mvp.overview.streets;
 
 import be.scoutsronse.wafelbak.domain.entity.Cluster;
 import be.scoutsronse.wafelbak.domain.entity.Street;
+import be.scoutsronse.wafelbak.domain.id.ClusterId;
 import be.scoutsronse.wafelbak.mvp.Presenter;
 import be.scoutsronse.wafelbak.mvp.map.MapPresenter;
 import be.scoutsronse.wafelbak.mvp.util.OpenStreetMapUtils;
@@ -10,6 +11,7 @@ import be.scoutsronse.wafelbak.osm.OpenStreetMapService;
 import be.scoutsronse.wafelbak.osm.domain.OSM;
 import be.scoutsronse.wafelbak.osm.domain.Way;
 import be.scoutsronse.wafelbak.repository.api.ClusterRepository;
+import be.scoutsronse.wafelbak.tech.util.Collectors;
 import com.sothawo.mapjfx.CoordinateLine;
 import org.springframework.stereotype.Component;
 
@@ -48,17 +50,14 @@ public class StreetOverviewPresenter extends Presenter<StreetOverviewModel, Stre
         List<StreetDto> streetDtosOfRonse = streetsByName.entrySet().stream().filter(entry -> entry.getValue().stream().flatMap(CoordinateLine::getCoordinateStream).count() > 2L).map(entry -> new StreetDto(entry.getKey(), entry.getValue())).collect(toList());
         model().bindViewToModel(streetDtosOfRonse);
 
-        Map<String, List<Way>> collect = streetsOfRonse.keySet().stream().filter(way -> streetsOfRonse.get(way).getCoordinateStream().count() > 1L).collect(groupingBy(way -> ofNullable(way.tags().get("name")).orElse("Unknown name")));
-        Map<String, List<Long>> collect1 = collect.entrySet().stream().collect(toMap(Map.Entry::getKey, entry -> entry.getValue().stream().map(Way::id).sorted().collect(toList())));
-        System.out.println(collect1);
-
         Collection<Cluster> clusters = clusterRepository.findAll();
-        List<ClusterData> clusterData = clusters.stream().map(ClusterData::new).collect(toList());
-        List<StreetData> streetData = clusters.stream().map(Cluster::streets).flatMap(Collection::stream).map(street -> new StreetData(street, wayService.findCoordinateLinesBy(street.wayIds()))).collect(toList());
-        model().setClusters(clusterData, streetData);
+        Map<ClusterId, ClusterData> clusterData = clusters.stream().map(ClusterData::new).collect(Collectors.toMapByKey(ClusterData::id));
+        Map<ClusterId, List<StreetData>> streetData = clusters.stream().map(Cluster::streets).flatMap(Collection::stream).map(street -> new StreetData(street, wayService.findCoordinateLinesBy(street.wayIds()))).collect(groupingBy(StreetData::clusterId));
+        clusterData.forEach((key, value) -> value.setStreets(streetData.get(key)));
+        model().setClusters(clusterData.values());
     }
 
-    public void selectStreets(List<CoordinateLine> coordinateLines) {
+    public void selectStreets(Collection<CoordinateLine> coordinateLines) {
         mapPresenter.selectStreets(coordinateLines);
     }
 
@@ -70,5 +69,9 @@ public class StreetOverviewPresenter extends Presenter<StreetOverviewModel, Stre
         Cluster c1 = new Cluster("Cluster 1 test", asList(s1, s2));
         Cluster c2 = new Cluster("Testing nb 2", asList(s3, s4));
         clusterRepository.save(asList(c1, c2));
+    }
+
+    public void clearSelection() {
+        model().clearSelection();
     }
 }

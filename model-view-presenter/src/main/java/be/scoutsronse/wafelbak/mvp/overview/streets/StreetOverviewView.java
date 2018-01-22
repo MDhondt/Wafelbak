@@ -2,49 +2,55 @@ package be.scoutsronse.wafelbak.mvp.overview.streets;
 
 import be.scoutsronse.wafelbak.mvp.View;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+
+import java.util.Collection;
+import java.util.Collections;
+
+import static java.util.stream.Collectors.toList;
 
 public class StreetOverviewView extends View<StreetOverviewPresenter> {
 
     private TitledPane pane;
     private TableView<StreetDto> streetOverviewTable;
-    private TableView<ClusterData> overviewTable;
+    private TreeView<ClusterItem> clusterTree;
 
     public StreetOverviewView(StreetOverviewPresenter presenter) {
         super(presenter);
         pane = new TitledPane();
         streetOverviewTable = new TableView<>();
-        createOverviewTable();
+        createClusterTree();
         TableColumn<StreetDto, String> streetNameColumn = new TableColumn<>();
         streetNameColumn.setCellValueFactory(cellData -> cellData.getValue().name());
         streetOverviewTable.getColumns().add(streetNameColumn);
-        streetOverviewTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<StreetDto>() {
-            @Override
-            public void changed(ObservableValue<? extends StreetDto> observable, StreetDto oldValue, StreetDto newValue) {
-                if (newValue != null) {
-                    presenter().selectStreets(newValue.coordinateLines());
-                }
+        streetOverviewTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                presenter().selectStreets(newValue.coordinateLines());
             }
         });
         Button button = new Button("persist");
         button.setOnAction(event -> presenter().persist());
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(button, overviewTable, streetOverviewTable);
+        vBox.getChildren().addAll(button, clusterTree, streetOverviewTable);
         pane.setContent(vBox);
     }
 
-    private void createOverviewTable() {
-        overviewTable = new TableView<>();
-        TableColumn<ClusterData, String> column = new TableColumn<>();
-        column.setCellValueFactory(cellData -> cellData.getValue().name());
-        overviewTable.getColumns().add(column);
-        overviewTable.getSortOrder().add(column);
+    private void createClusterTree() {
+        clusterTree = new TreeView<>(new TreeItem<>());
+        clusterTree.setShowRoot(false);
+        clusterTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                ClusterItem selectedItem = newValue.getValue();
+                if (selectedItem instanceof ClusterData) {
+                    presenter().selectStreets(((ClusterData) selectedItem).streets().stream().map(StreetData::coordinateLines).flatMap(Collection::stream).collect(toList()));
+                } else if (selectedItem instanceof StreetData) {
+                    presenter().selectStreets(((StreetData) selectedItem).coordinateLines());
+                }
+            } else {
+                presenter().selectStreets(Collections.emptyList());
+            }
+        });
     }
 
     public TitledPane getPane() {
@@ -55,11 +61,15 @@ public class StreetOverviewView extends View<StreetOverviewPresenter> {
         return pane.textProperty();
     }
 
-    TableView<ClusterData> overviewTable() {
-        return overviewTable;
-    }
-
     TableView<StreetDto> streetOverviewTable() {
         return streetOverviewTable;
+    }
+
+    TreeItem<ClusterItem> clusterRoot() {
+        return clusterTree.getRoot();
+    }
+
+    void clearSelection() {
+        clusterTree.getSelectionModel().clearSelection();
     }
 }

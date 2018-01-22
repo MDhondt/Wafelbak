@@ -4,6 +4,7 @@ import be.scoutsronse.wafelbak.mvp.Model;
 import com.sothawo.mapjfx.CoordinateLine;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static javafx.scene.paint.Color.BLUE;
@@ -27,7 +28,7 @@ public class MapModel extends Model<MapView> {
         this.borderOfRonse = borderOfRonse;
     }
 
-    void setSelectedStreets(List<CoordinateLine> selectedStreets) {
+    void setSelectedStreets(Collection<CoordinateLine> selectedStreets) {
         if (!this.selectedStreets.isEmpty()) {
             for (CoordinateLine street : this.selectedStreets) {
                 view().getMap().removeCoordinateLine(street);
