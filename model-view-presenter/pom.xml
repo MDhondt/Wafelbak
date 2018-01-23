@@ -13,7 +13,7 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>repository-api</artifactId>
+            <artifactId>repository</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>

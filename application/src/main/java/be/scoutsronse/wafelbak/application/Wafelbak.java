@@ -2,7 +2,6 @@ package be.scoutsronse.wafelbak.application;
 
 import be.scoutsronse.wafelbak.mvp.main.WafelbakPresenter;
 import be.scoutsronse.wafelbak.tech.event.eventbus.AsynchronousEventBus;
-import be.scoutsronse.wafelbak.tech.event.eventbus.EventBus;
 import be.scoutsronse.wafelbak.tech.event.eventbus.PrioritizedEventBus;
 import be.scoutsronse.wafelbak.tech.event.eventbus.Subscribe;
 import javafx.application.Application;
@@ -25,7 +24,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static be.scoutsronse.wafelbak.tech.event.ApplicationStarted.applicationStarted;
 import static be.scoutsronse.wafelbak.tech.reflection.Reflection.findAllMethodsWithAnnotation;
 import static java.util.Arrays.stream;
 import static java.util.function.Function.identity;
@@ -94,7 +92,6 @@ public class Wafelbak extends Application {
             protected Void call() {
                 applicationContext = new AnnotationConfigApplicationContext(WafelbakConfig.class);
                 registerEventHandlers();
-                applicationContext.getBean(EventBus.class).post(applicationStarted());
                 return null;
             }
         };

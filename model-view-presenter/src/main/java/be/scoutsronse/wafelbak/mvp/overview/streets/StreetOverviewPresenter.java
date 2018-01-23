@@ -9,9 +9,10 @@ import be.scoutsronse.wafelbak.mvp.way.WayService;
 import be.scoutsronse.wafelbak.osm.OpenStreetMapService;
 import be.scoutsronse.wafelbak.osm.domain.OSM;
 import be.scoutsronse.wafelbak.osm.domain.Way;
-import be.scoutsronse.wafelbak.repository.api.ClusterRepository;
+import be.scoutsronse.wafelbak.repository.ClusterRepository;
 import be.scoutsronse.wafelbak.tech.util.Collectors;
 import com.sothawo.mapjfx.CoordinateLine;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -25,6 +26,7 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.*;
 
 @Component
+@DependsOn("clusterInitializer")
 public class StreetOverviewPresenter extends Presenter<StreetOverviewModel, StreetOverviewView> {
 
     @Inject

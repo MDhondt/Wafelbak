@@ -25,7 +25,8 @@
     <properties>
         <java.build.version>1.8</java.build.version>
 
-        <spring.version>4.3.3.RELEASE</spring.version>
+        <spring.version>5.0.2.RELEASE</spring.version>
+        <spring.data.jpa.version>2.0.2.RELEASE</spring.data.jpa.version>
         <hibernate.version>5.2.2.Final</hibernate.version>
         <h2.version>1.4.192</h2.version>
         <junit.version>4.12</junit.version>
@@ -46,7 +47,6 @@
         <module>model-view-presenter</module>
         <module>osm</module>
         <module>repository</module>
-        <module>repository-api</module>
     </modules>
 
     <dependencies>
@@ -101,11 +101,6 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>repository-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
                 <artifactId>repository</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -119,6 +114,11 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-orm</artifactId>
                 <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-jpa</artifactId>
+                <version>${spring.data.jpa.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>

@@ -2,11 +2,10 @@ package be.scoutsronse.wafelbak.repository.init;
 
 import be.scoutsronse.wafelbak.domain.entity.Cluster;
 import be.scoutsronse.wafelbak.domain.entity.Street;
-import be.scoutsronse.wafelbak.repository.api.ClusterRepository;
-import be.scoutsronse.wafelbak.tech.event.ApplicationStarted;
-import be.scoutsronse.wafelbak.tech.event.eventbus.Subscribe;
+import be.scoutsronse.wafelbak.repository.ClusterRepository;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import static be.scoutsronse.wafelbak.domain.id.WayId.aWayId;
@@ -19,10 +18,10 @@ public class ClusterInitializer {
     @Inject
     private ClusterRepository clusterRepository;
 
-    @Subscribe
-    public void initializeWhen(ApplicationStarted event) {
+    @PostConstruct
+    public void init() {
         if (clusterRepository.findAll().isEmpty()) {
-            clusterRepository.save(asList(
+            clusterRepository.saveAll(asList(
                     groteMarkt(),
                     klijpeStraat(),
                     mussenStraat(),
