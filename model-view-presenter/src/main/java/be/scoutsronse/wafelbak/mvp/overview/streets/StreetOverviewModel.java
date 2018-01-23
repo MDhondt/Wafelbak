@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static be.scoutsronse.wafelbak.mvp.i18n.i18n.STREET_OVERVIEW_TITLE;
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 import static javafx.collections.FXCollections.observableArrayList;
 
@@ -33,13 +34,14 @@ public class StreetOverviewModel extends Model<StreetOverviewView> {
 
     void setClusters(Collection<ClusterData> clusters) {
         this.clusters.setAll(clusters);
-        clusters.forEach(cluster -> view().clusterRoot().getChildren().add(new TreeItem<>(cluster)));
+        clusters.stream().sorted(comparing(ClusterItem::toString)).forEach(cluster -> view().clusterRoot().getChildren().add(new TreeItem<>(cluster)));
         view().clusterRoot().getChildren()
                 .forEach(clusterItem -> clusterItem.getChildren().addAll(
                         ((ClusterData) clusterItem.getValue())
                                 .streets()
                                 .stream()
                                 .map(ClusterItem.class::cast)
+                                .sorted(comparing(ClusterItem::toString))
                                 .map(TreeItem::new)
                                 .collect(toList())));
     }

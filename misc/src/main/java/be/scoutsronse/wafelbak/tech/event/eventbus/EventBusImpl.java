@@ -1,10 +1,7 @@
 package be.scoutsronse.wafelbak.tech.event.eventbus;
 
-import be.scoutsronse.wafelbak.tech.event.ApplicationStarted;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -17,7 +14,7 @@ import static java.lang.reflect.Modifier.isPublic;
 import static java.lang.reflect.Proxy.getInvocationHandler;
 import static org.springframework.aop.support.AopUtils.isJdkDynamicProxy;
 
-public abstract class EventBusImpl implements EventBus , ApplicationListener<ContextRefreshedEvent> {
+public abstract class EventBusImpl implements EventBus {
 
     private Multimap<Class<?>, SynchronousEventBus.Subscriber> subscribers = create();
 
@@ -90,10 +87,5 @@ public abstract class EventBusImpl implements EventBus , ApplicationListener<Con
                 method.invoke(handler, event);
             }
         }
-    }
-
-    @Override
-    public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        post(ApplicationStarted.applicationStarted());
     }
 }
