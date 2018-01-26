@@ -29,10 +29,10 @@ public class StreetOverviewView extends View<StreetOverviewPresenter> {
                 presenter().selectStreets(newValue.coordinateLines());
             }
         });
-        Button button = new Button("persist");
+        Button button = new Button("print selection");
         button.setOnAction(event -> presenter().persist());
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(button, clusterTree, streetOverviewTable);
+        vBox.getChildren().addAll(clusterTree, button, streetOverviewTable);
         pane.setContent(vBox);
     }
 
