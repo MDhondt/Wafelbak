@@ -36,7 +36,9 @@ public class ClusterInitializer {
                     kruisstraat(),
                     kleve(),
                     hogerlucht(),
-                    bruul()
+                    bruul(),
+                    zuidstraat(),
+                    walenweg()
             ));
         }
     }
@@ -218,5 +220,28 @@ public class ClusterInitializer {
         Street sintpieter = new Street("Sint-Pietersnieuwstraat", asList(aWayId(8117547L), aWayId(8117686L)));
         Street bruul = new Street("Bruul", asList(aWayId(11845810L), aWayId(135517451L), aWayId(313880317L)));
         return new Cluster("Bruul", asList(spillegem, veemarkt, priestersstraat, jean, biesestraat, sintpieter, bruul, verlorenstraat));
+    }
+
+    private Cluster zuidstraat() {
+        Street joseph = new Street("Joseph Ferrantstraat", singletonList(aWayId(8117588L)));
+        Street politiekegevangenenstraat = new Street("Politiekegevangenenstraat", singletonList(aWayId(28695997L)));
+        Street jeanBaptiste = new Street("Jean-Baptiste Dekeyserstraat", singletonList(aWayId(8117179L)));
+        Street charles = new Street("Charles Vandendoorenstraat", singletonList(aWayId(8117193L)));
+        Street kerkplein = new Street("Kerkplein", asList(aWayId(8117610L), aWayId(319960345L)));
+        Street oudeVesten = new Street("Oude Vesten", asList(aWayId(184406098L), aWayId(313880323L)));
+        Street zuidstraat = new Street("Zuidstraat", asList(aWayId(8117181L), aWayId(8117189L), aWayId(319960403L)));
+        Street ijzerstraat = new Street("IJzerstraat", asList(aWayId(28695974L), aWayId(221233976L), aWayId(313345710L), aWayId(319960337L)));
+        return new Cluster("Zuidstraat", asList(joseph, politiekegevangenenstraat, jeanBaptiste, charles, kerkplein, oudeVesten, zuidstraat, ijzerstraat));
+    }
+
+    private Cluster walenweg() {
+        Street walenweg = new Street("Walenweg", singletonList(aWayId(34206416L)));
+        Street camille = new Street("Camille Lemonnierlaan", singletonList(aWayId(33268544L)));
+        Street constantin = new Street("Constantin Meunierstraat", singletonList(aWayId(34206490L)));
+        Street modeste = new Street("Modeste de Noyettestraat", singletonList(aWayId(34206415L)));
+        Street fernand = new Street("Fernand Duboisstraat", asList(aWayId(34206593L), aWayId(34206594L)));
+        Street victor = new Street("Victor Hortastraat", asList(aWayId(34206591L), aWayId(34206592L)));
+        Street saint = new Street("Saint-Sauveurstraat", asList(aWayId(34206414L), aWayId(121772374L), aWayId(137136753L), aWayId(395265577L)));
+        return new Cluster("Walenweg", asList(walenweg, camille, constantin, modeste, fernand, victor, saint));
     }
 }
