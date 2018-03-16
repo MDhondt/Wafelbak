@@ -38,7 +38,17 @@ public class ClusterInitializer {
                     hogerlucht(),
                     bruul(),
                     zuidstraat(),
-                    walenweg()
+                    walenweg(),
+                    bordetlaan(),
+                    stookt(),
+                    langeweg(),
+                    aatstraat(),
+                    scheldekouter(),
+                    elzelestraat(),
+                    elzeelsesteenweg(),
+                    rotterij(),
+                    maquisstraat(),
+                    germinal()
             ));
         }
     }
@@ -236,12 +246,121 @@ public class ClusterInitializer {
 
     private Cluster walenweg() {
         Street walenweg = new Street("Walenweg", singletonList(aWayId(34206416L)));
+        Street hersenplank = new Street("Hersenplank", singletonList(aWayId(37129698L)));
         Street camille = new Street("Camille Lemonnierlaan", singletonList(aWayId(33268544L)));
         Street constantin = new Street("Constantin Meunierstraat", singletonList(aWayId(34206490L)));
         Street modeste = new Street("Modeste de Noyettestraat", singletonList(aWayId(34206415L)));
         Street fernand = new Street("Fernand Duboisstraat", asList(aWayId(34206593L), aWayId(34206594L)));
         Street victor = new Street("Victor Hortastraat", asList(aWayId(34206591L), aWayId(34206592L)));
         Street saint = new Street("Saint-Sauveurstraat", asList(aWayId(34206414L), aWayId(121772374L), aWayId(137136753L), aWayId(395265577L)));
-        return new Cluster("Walenweg", asList(walenweg, camille, constantin, modeste, fernand, victor, saint));
+        return new Cluster("Walenweg", asList(walenweg, hersenplank, camille, constantin, modeste, fernand, victor, saint));
+    }
+
+    private Cluster bordetlaan() {
+        Street aatstraat = new Street("Aatstraat", singletonList(aWayId(28695985L)));
+        Street jules = new Street("Jules Bordetlaan", singletonList(aWayId(8590411L)));
+        Street david = new Street("David Teniersstraat", singletonList(aWayId(37131860L)));
+        Street louis = new Street("Louis Pasteurlaan", singletonList(aWayId(148455817L)));
+        Street molendam = new Street("Molendam", asList(aWayId(25772244L), aWayId(221233966L)));
+        Street rodeBroeckstraat = new Street("Rode Broeckstraat", asList(aWayId(37070972L), aWayId(226011554L)));
+        Street armand = new Street("Armand Demeulemeesterstraat", asList(aWayId(175193389L), aWayId(350894887L)));
+        Street auguste = new Street("Auguste Payenstraat", asList(aWayId(350878611L), aWayId(350881823L), aWayId(350882017L)));
+        return new Cluster("Jules Bordetlaan", asList(aatstraat, jules, david, louis, molendam, rodeBroeckstraat, armand, auguste));
+    }
+
+    private Cluster stookt() {
+        Street stookt = new Street("Stookt", singletonList(aWayId(34347706L)));
+        Street vanEyckstraat = new Street("Gebroeders Van Eyckstraat", singletonList(aWayId(36772713L)));
+        Street georges = new Street("Georges Dumontstraat", singletonList(aWayId(37067289L)));
+        Street square = new Street("Square Georges Eeckhout", singletonList(aWayId(37040675L)));
+        Street edmond = new Street("Edmond Picardlaan", singletonList(aWayId(37067287L)));
+        Street eeckoutstraat = new Street("Georges Eeckoutstraat", asList(aWayId(34347117L), aWayId(121772373L)));
+        Street joseph = new Street("Joseph Wautersplein", asList(aWayId(37073474L), aWayId(37073476L)));
+        Street hector = new Street("Hector Denisstraat", asList(aWayId(37067288L), aWayId(129776637L), aWayId(129776638L)));
+        Street ernest = new Street("Ernest Solvaystraat", asList(aWayId(37040674L), aWayId(129776635L), aWayId(129776636L), aWayId(226011541L)));
+        return new Cluster("Stookt", asList(stookt, vanEyckstraat, georges, square, edmond, eeckoutstraat, joseph, hector, ernest));
+    }
+
+    private Cluster langeweg() {
+        Street isidoor = new Street("Isidoor Opsomerstraat", singletonList(aWayId(37073478L)));
+        Street achturenstraat = new Street("Achturenstraat", singletonList(aWayId(37073477L)));
+        Street zonnebloemstraat = new Street("Zonnebloemstraat", singletonList(aWayId(184159857L)));
+        Street deurnemeers = new Street("Deurnemeers", singletonList(aWayId(34347705L)));
+        Street adolphe = new Street("Adolphe Hullebroeckstraat", singletonList(aWayId(37071270L)));
+        Street weerstandstraat = new Street("Weerstandstraat", singletonList(aWayId(37189933L)));
+        Street stookt = new Street("Stooktstraat", asList(aWayId(37071108L), aWayId(37073481L)));
+        Street langeweg = new Street("Langeweg", asList(aWayId(37071271L), aWayId(184159856L)));
+        Street deurnestraat = new Street("Deurnestraat", asList(aWayId(121772348L), aWayId(121772349L), aWayId(161282474L)));
+        return new Cluster("Langeweg", asList(isidoor, achturenstraat, zonnebloemstraat, deurnemeers, weerstandstraat, stookt, langeweg, deurnestraat, adolphe));
+    }
+
+    private Cluster aatstraat() {
+        Street nijverheidsstraat = new Street("Nijverheidsstraat", singletonList(aWayId(166338313L)));
+        Street hermes = new Street("Hermes Van Wynghenestraat", singletonList(aWayId(161056430L)));
+        Street georges = new Street("Georges Desmetstraat", singletonList(aWayId(40029763L)));
+        Street beukenlaan = new Street("Beukenlaan", singletonList(aWayId(37071177L)));
+        Street aatstraat = new Street("Aatstraat", asList(aWayId(401951017L), aWayId(352639601L)));
+        Street adolphe = new Street("Adolphe Hullebroeckstraat", asList(aWayId(37071176L), aWayId(37071269L)));
+        Street ovide = new Street("Ovide Decrolylaan", asList(aWayId(148455816L), aWayId(226011553L)));
+        return new Cluster("Aatstraat", asList(nijverheidsstraat, hermes, georges, beukenlaan, aatstraat, adolphe, ovide));
+    }
+
+    private Cluster scheldekouter() {
+        Street scheldekouter = new Street("Scheldekouter", asList(aWayId(37073753L), aWayId(37073754L), aWayId(40032506L),
+                aWayId(40032507L), aWayId(40032508L), aWayId(184171348L), aWayId(184171349L), aWayId(184171350L), aWayId(184171351L),
+                aWayId(184171352L), aWayId(184171353L), aWayId(184171354L), aWayId(184171355L), aWayId(184171356L), aWayId(184171357L),
+                aWayId(184171358L), aWayId(184171359L), aWayId(226011557L)));
+        return new Cluster("Scheldekouter", singletonList(scheldekouter));
+    }
+
+    private Cluster elzelestraat() {
+        Street poermagazijnstraat = new Street("Poermagazijnstraat", singletonList(aWayId(8590414L)));
+        Street bredestraat = new Street("Bredestraat1", asList(aWayId(8117600L), aWayId(226011535L), aWayId(226011536L), aWayId(313880310L), aWayId(313880311L), aWayId(313880312L)));
+        Street brugstraat = new Street("Nieuwe Brugstraat", singletonList(aWayId(8590347L)));
+        Street groteMarijve = new Street("Grote Marijve", singletonList(aWayId(8590083L)));
+        Street bareelstraat = new Street("Bareelstraat", singletonList(aWayId(8590086L)));
+        Street zenobe = new Street("Zénobe Grammenestraat", singletonList(aWayId(8590346L)));
+        Street olifantstraat = new Street("Olifantstraat", asList(aWayId(8117037L), aWayId(313880322L)));
+        Street kleineMarijve = new Street("Kleine Marijve", asList(aWayId(184311574L), aWayId(392652889L)));
+        Street elzelestraat = new Street("Elzelestraat", asList(aWayId(184838168L), aWayId(225977064L), aWayId(313880319L), aWayId(313880320L)));
+        return new Cluster("Elzelestraat", asList(poermagazijnstraat, bredestraat, brugstraat, groteMarijve, bareelstraat, zenobe, olifantstraat, kleineMarijve, elzelestraat));
+    }
+
+    private Cluster elzeelsesteenweg() {
+        Street europastraat = new Street("Europastraat", singletonList(aWayId(405716303L)));
+        Street papekouters = new Street("Papekouters", singletonList(aWayId(37073782L)));
+        Street konrad = new Street("Konrad Adenauerstraat", singletonList(aWayId(142111488L)));
+        Street hendrik = new Street("Hendrik Consciencestraat", singletonList(aWayId(25772263L)));
+        Street blauwesteen = new Street("Blauwesteen", asList(aWayId(8590415L), aWayId(132344727L), aWayId(184298288L)));
+        Street elzeelsesteenweg = new Street("Elzeelsesteenweg", asList(aWayId(226011538L), aWayId(226011539L), aWayId(361112987L)));
+        Street beylsstraat = new Street("Mgr. Beylsstraat", asList(aWayId(37073858L), aWayId(60788200L), aWayId(142112965L), aWayId(360015960L)));
+        return new Cluster("Elzeelsesteenweg", asList(europastraat, papekouters, konrad, hendrik, blauwesteen, elzeelsesteenweg, beylsstraat));
+    }
+
+    private Cluster rotterij() {
+        Street rodekruisstraat = new Street("Rodekruisstraat", singletonList(aWayId(157253693L)));
+        Street jean = new Street("Jean Monnetstraat", singletonList(aWayId(132344720L)));
+        Street paul = new Street("Paul Henri Spaakstraat", singletonList(aWayId(401928343L)));
+        Street kersenstraat = new Street("Kersenstraat", singletonList(aWayId(157367578L)));
+        Street ooststraat = new Street("Ooststraat", singletonList(aWayId(229046770L)));
+        Street jagersstraat = new Street("Jagersstraat", singletonList(aWayId(127735634L)));
+        Street waatsbrugstraat = new Street("Waatsbrugstraat", asList(aWayId(8590344L), aWayId(142111069L)));
+        Street robert = new Street("Robert Schumanstraat", asList(aWayId(132344712L), aWayId(132344724L)));
+        Street elzeelsesteenweg = new Street("Elzeelsesteenweg", asList(aWayId(184281893L), aWayId(184281894L), aWayId(400454956L)));
+        Street rotterij = new Street("Rotterij", asList(aWayId(8590088L), aWayId(25772264L), aWayId(37073932L), aWayId(60788231L), aWayId(121772391L),
+                aWayId(127735631L), aWayId(132344730L), aWayId(226011555L), aWayId(226011556L), aWayId(360015961L), aWayId(400480617L)));
+        return new Cluster("Rotterij", asList(rodekruisstraat, jean, paul, kersenstraat, ooststraat, jagersstraat, waatsbrugstraat, robert, elzeelsesteenweg, rotterij));
+    }
+
+    private Cluster germinal() {
+        Street germinal = new Street("Germinal", asList(aWayId(8590089L), aWayId(8590337L), aWayId(8590345L), aWayId(132344713L), aWayId(169175174L),
+                aWayId(169175175L), aWayId(169175176L), aWayId(169175177L), aWayId(169175178L), aWayId(169175179L), aWayId(169175181L), aWayId(169175182L), aWayId(184742070L), aWayId(226011543L), aWayId(226011544L)));
+        return new Cluster("Germinal", singletonList(germinal));
+    }
+
+    private Cluster maquisstraat() {
+        Street elzeelsesteenweg = new Street("Elzeelsesteenweg", asList(aWayId(33993757L), aWayId(221233963L), aWayId(221233964L)));
+        Street maquisstraat = new Street("Maquisstraat", asList(aWayId(35584645L), aWayId(37071722L), aWayId(37071723L), aWayId(121772363L)));
+        return new Cluster("Maquisstraat", asList(elzeelsesteenweg, maquisstraat));
     }
 }
