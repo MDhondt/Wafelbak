@@ -13,26 +13,16 @@ import static java.util.stream.Collectors.toList;
 public class StreetOverviewView extends View<StreetOverviewPresenter> {
 
     private TitledPane pane;
-    private TableView<StreetDto> streetOverviewTable;
     private TreeView<ClusterItem> clusterTree;
 
     public StreetOverviewView(StreetOverviewPresenter presenter) {
         super(presenter);
         pane = new TitledPane();
-        streetOverviewTable = new TableView<>();
         createClusterTree();
         TableColumn<StreetDto, String> streetNameColumn = new TableColumn<>();
         streetNameColumn.setCellValueFactory(cellData -> cellData.getValue().name());
-        streetOverviewTable.getColumns().add(streetNameColumn);
-        streetOverviewTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                presenter().selectStreets(newValue.coordinateLines());
-            }
-        });
-        Button button = new Button("print selection");
-        button.setOnAction(event -> presenter().persist());
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(clusterTree, button, streetOverviewTable);
+        vBox.getChildren().addAll(clusterTree);
         pane.setContent(vBox);
     }
 
@@ -59,10 +49,6 @@ public class StreetOverviewView extends View<StreetOverviewPresenter> {
 
     StringProperty titleProperty() {
         return pane.textProperty();
-    }
-
-    TableView<StreetDto> streetOverviewTable() {
-        return streetOverviewTable;
     }
 
     TreeItem<ClusterItem> clusterRoot() {

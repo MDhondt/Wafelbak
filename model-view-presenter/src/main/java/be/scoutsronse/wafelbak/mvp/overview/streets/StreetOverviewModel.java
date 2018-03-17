@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 
 import java.util.Collection;
-import java.util.List;
 
 import static be.scoutsronse.wafelbak.mvp.i18n.i18n.STREET_OVERVIEW_TITLE;
 import static java.util.Comparator.comparing;
@@ -17,19 +16,15 @@ import static javafx.collections.FXCollections.observableArrayList;
 public class StreetOverviewModel extends Model<StreetOverviewView> {
 
     private StringProperty title = new SimpleStringProperty();
-    private ObservableList<StreetDto> streetDtos = observableArrayList();
     private ObservableList<ClusterData> clusters = observableArrayList();
 
     public StreetOverviewModel(StreetOverviewView view) {
         super(view);
     }
 
-    public void bindViewToModel(List<StreetDto> streets) {
-        view().streetOverviewTable().setItems(this.streetDtos);
+    public void bindViewToModel() {
         view().titleProperty().bind(title);
-
         title.setValue(view().message(STREET_OVERVIEW_TITLE));
-        this.streetDtos.setAll(streets);
     }
 
     void setClusters(Collection<ClusterData> clusters) {
