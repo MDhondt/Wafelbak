@@ -1,12 +1,17 @@
 package be.scoutsronse.wafelbak.mvp.main;
 
 import be.scoutsronse.wafelbak.mvp.View;
+import be.scoutsronse.wafelbak.mvp.common.AccordionPane;
 import com.sothawo.mapjfx.MapView;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class WafelbakView extends View<WafelbakPresenter> {
 
@@ -14,6 +19,8 @@ public class WafelbakView extends View<WafelbakPresenter> {
     private Scene scene;
     private BorderPane mainPane;
     private Accordion leftTools;
+    private Map<TitledPane, ChangeListener<TitledPane>> accordionPaneCollapseListeners;
+    private Map<TitledPane, ChangeListener<TitledPane>> accordionPaneExpansionListeners;
 
     public WafelbakView(WafelbakPresenter presenter) {
         super(presenter);
@@ -39,31 +46,30 @@ public class WafelbakView extends View<WafelbakPresenter> {
     }
 
     private Accordion createLeftTools() {
+        accordionPaneCollapseListeners = new HashMap<>();
+        accordionPaneExpansionListeners = new HashMap<>();
+
         Accordion leftTools = new Accordion();
+        leftTools.expandedPaneProperty().addListener((observable, oldValue, newValue) -> {
+            if (accordionPaneCollapseListeners.containsKey(oldValue)) {
+                accordionPaneCollapseListeners.get(oldValue).changed(observable, oldValue, newValue);
+            }
+            if (accordionPaneExpansionListeners.containsKey(newValue)) {
+                accordionPaneExpansionListeners.get(newValue).changed(observable, oldValue, newValue);
+            }
+        });
         leftTools.setMinWidth(250);
 
         return leftTools;
     }
 
-//    private TitledPane createStartSale() {
-//        VBox startSale = new VBox();
-//
-//        return new TitledPane(message(START_SALE_TITLE), startSale);
-//    }
-//
-//    private TitledPane createSettings() {
-//        VBox settings = new VBox();
-//        CheckBox emphasizeRonse = new CheckBox(message(EMPHASIZE_RONSE));
-//        settings.getChildren().add(emphasizeRonse);
-//        ronseBorder = loadCoordinateLine(getClass().getResource("/ronseBorder.csv")).orElse(new CoordinateLine()).setColor(Color.MAGENTA);
-//        emphasizeRonse.selectedProperty().bindBidirectional(ronseBorder.visibleProperty());
-//
-//        return new TitledPane(message(SETTINGS), settings);
-//    }
-
-    public void addLeftTools(TitledPane... panes) {
-        leftTools.getPanes().setAll(panes);
-        leftTools.setExpandedPane(panes[0]);
+    public void addLeftTools(AccordionPane... panes) {
+        for (AccordionPane pane : panes) {
+            accordionPaneCollapseListeners.put(pane.pane(), pane.collapseListener());
+            accordionPaneExpansionListeners.put(pane.pane(), pane.expansionListener());
+            leftTools.getPanes().add(pane.pane());
+        }
+        leftTools.setExpandedPane(panes[0].pane());
         mainPane.setLeft(leftTools);
     }
 

@@ -2,12 +2,14 @@ package be.scoutsronse.wafelbak.mvp.overview.streets;
 
 import be.scoutsronse.wafelbak.mvp.View;
 import javafx.beans.property.StringProperty;
-import javafx.scene.control.*;
+import javafx.scene.control.TitledPane;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.layout.VBox;
 
 import java.util.Collection;
-import java.util.Collections;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 public class StreetOverviewView extends View<StreetOverviewPresenter> {
@@ -17,12 +19,14 @@ public class StreetOverviewView extends View<StreetOverviewPresenter> {
 
     public StreetOverviewView(StreetOverviewPresenter presenter) {
         super(presenter);
-        pane = new TitledPane();
+
         createClusterTree();
-        TableColumn<StreetDto, String> streetNameColumn = new TableColumn<>();
-        streetNameColumn.setCellValueFactory(cellData -> cellData.getValue().name());
+
         VBox vBox = new VBox();
         vBox.getChildren().addAll(clusterTree);
+        clusterTree.prefHeightProperty().bind(vBox.heightProperty());
+
+        pane = new TitledPane();
         pane.setContent(vBox);
     }
 
@@ -38,12 +42,12 @@ public class StreetOverviewView extends View<StreetOverviewPresenter> {
                     presenter().selectStreets(((StreetData) selectedItem).coordinateLines());
                 }
             } else {
-                presenter().selectStreets(Collections.emptyList());
+                presenter().selectStreets(emptyList());
             }
         });
     }
 
-    public TitledPane getPane() {
+    TitledPane getPane() {
         return pane;
     }
 

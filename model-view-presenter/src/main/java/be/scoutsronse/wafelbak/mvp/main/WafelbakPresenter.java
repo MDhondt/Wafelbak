@@ -19,7 +19,7 @@ public class WafelbakPresenter extends Presenter<WafelbakModel, WafelbakView> {
 
     @PostConstruct
     void initView() {
-        view().addLeftTools(streetOverviewPresenter.view().getPane());
+        view().addLeftTools(streetOverviewPresenter.pane());
         view().addMap(mapPresenter.view().getMap());
     }
 }
