@@ -22,7 +22,7 @@ public class StreetOverviewModel extends Model<StreetOverviewView> {
         super(view);
     }
 
-    public void bindViewToModel() {
+    void bindViewToModel() {
         view().titleProperty().bind(title);
         title.setValue(view().message(STREET_OVERVIEW_TITLE));
     }
