@@ -9,7 +9,7 @@ public abstract class View<PRESENTER extends Presenter<? extends Model<? extends
 
     private PRESENTER presenter;
     private MessageSource messageSource;
-    private static final Locale locale = new Locale("nl", "BE");
+    public static final Locale locale = new Locale("nl", "BE");
 
     public View(PRESENTER presenter) {
         this.presenter = presenter;

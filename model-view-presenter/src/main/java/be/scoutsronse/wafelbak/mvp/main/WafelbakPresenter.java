@@ -4,6 +4,7 @@ import be.scoutsronse.wafelbak.mvp.Presenter;
 import be.scoutsronse.wafelbak.mvp.map.MapPresenter;
 import be.scoutsronse.wafelbak.mvp.overview.sale.SaleOverviewPresenter;
 import be.scoutsronse.wafelbak.mvp.overview.streets.StreetOverviewPresenter;
+import be.scoutsronse.wafelbak.mvp.settings.SettingsPresenter;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -18,11 +19,15 @@ public class WafelbakPresenter extends Presenter<WafelbakModel, WafelbakView> {
     @Inject
     private SaleOverviewPresenter saleOverviewPresenter;
     @Inject
+    private SettingsPresenter settingsPresenter;
+    @Inject
     private MapPresenter mapPresenter;
 
     @PostConstruct
     void initView() {
-        view().addLeftTools(streetOverviewPresenter.pane(), saleOverviewPresenter.pane());
+        view().addLeftTools(streetOverviewPresenter.pane(),
+                saleOverviewPresenter.pane(),
+                settingsPresenter.pane());
         view().addMap(mapPresenter.view().getMap());
     }
 }

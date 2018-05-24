@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import static be.scoutsronse.wafelbak.tech.event.ApplicationStarted.applicationStarted;
 import static be.scoutsronse.wafelbak.tech.reflection.Reflection.findAllMethodsWithAnnotation;
 import static java.util.Arrays.stream;
 import static java.util.function.Function.identity;
@@ -137,5 +138,7 @@ public class Wafelbak extends Application {
 
         presenter.view().setStage(mainStage);
         presenter.view().show();
+
+        applicationContext.getBean(AsynchronousEventBus.class).post(applicationStarted());
     }
 }
