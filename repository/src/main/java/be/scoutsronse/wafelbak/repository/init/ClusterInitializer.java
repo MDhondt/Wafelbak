@@ -320,7 +320,7 @@ public class ClusterInitializer {
 
     private Cluster elzelestraat() {
         Street poermagazijnstraat = new Street("Poermagazijnstraat", singletonList(aWayId(8590414L)));
-        Street bredestraat = new Street("Bredestraat1", asList(aWayId(8117600L), aWayId(226011535L), aWayId(226011536L), aWayId(313880310L), aWayId(313880311L), aWayId(313880312L)));
+        Street bredestraat = new Street("Bredestraat", asList(aWayId(8117600L), aWayId(226011535L), aWayId(226011536L), aWayId(313880310L), aWayId(313880311L), aWayId(313880312L)));
         Street brugstraat = new Street("Nieuwe Brugstraat", singletonList(aWayId(8590347L)));
         Street groteMarijve = new Street("Grote Marijve", singletonList(aWayId(8590083L)));
         Street bareelstraat = new Street("Bareelstraat", singletonList(aWayId(8590086L)));

@@ -2,6 +2,7 @@ package be.scoutsronse.wafelbak.mvp.overview.streets;
 
 import be.scoutsronse.wafelbak.mvp.View;
 import javafx.beans.property.StringProperty;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -11,20 +12,28 @@ import java.util.Collection;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
+import static org.controlsfx.control.textfield.TextFields.createClearableTextField;
 
 public class StreetOverviewView extends View<StreetOverviewPresenter> {
 
     private TitledPane pane;
     private TreeView<ClusterItem> clusterTree;
+    private TextField searchBox;
 
     public StreetOverviewView(StreetOverviewPresenter presenter) {
         super(presenter);
 
+        searchBox = createClearableTextField();
+        searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
+            String searchInput = newValue == null ? "" : newValue;
+            search(searchInput);
+        });
         createClusterTree();
 
-        VBox vBox = new VBox();
-        vBox.getChildren().addAll(clusterTree);
+        VBox vBox = new VBox(5);
+        vBox.getChildren().addAll(searchBox, clusterTree);
         clusterTree.prefHeightProperty().bind(vBox.heightProperty());
+        searchBox.prefWidthProperty().bind(clusterTree.widthProperty());
 
         pane = new TitledPane();
         pane.setContent(vBox);
@@ -60,6 +69,11 @@ public class StreetOverviewView extends View<StreetOverviewPresenter> {
     }
 
     void clearSelection() {
+        searchBox.clear();
         clusterTree.getSelectionModel().clearSelection();
+    }
+
+    private void search(String searchInput) {
+        presenter().search(searchInput);
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class StreetOverviewPresenter extends Presenter<StreetOverviewModel, Stre
         Map<ClusterId, List<StreetData>> streetData = clusters.stream().map(Cluster::streets).flatMap(Collection::stream).map(street -> new StreetData(street, wayService.findCoordinateLinesBy(street.wayIds()))).collect(groupingBy(StreetData::clusterId));
         clusterData.forEach((key, value) -> value.setStreets(streetData.get(key)));
         model().bindViewToModel();
-        model().setClusters(clusterData.values());
+        model().setAllClusters(clusterData.values());
     }
 
     void selectStreets(Collection<CoordinateLine> coordinateLines) {
@@ -60,5 +61,18 @@ public class StreetOverviewPresenter extends Presenter<StreetOverviewModel, Stre
         ChangeListener<TitledPane> expansionListener = null;
         ChangeListener<TitledPane> collapseListener = (observable, oldValue, newValue) -> clearSelection();
         return new AccordionPane(view().getPane(), expansionListener, collapseListener);
+    }
+
+    public void search(String searchInput) {
+        Collection<ClusterData> currentClusters = model().getAllClusters();
+        Collection<ClusterData> newClusters = new ArrayList<>();
+        for (ClusterData cluster : currentClusters) {
+            if (cluster.toString().toLowerCase().contains(searchInput.toLowerCase())) {
+                newClusters.add(cluster);
+            } else if (cluster.streets().stream().map(StreetData::toString).map(String::toLowerCase).anyMatch(street -> street.contains(searchInput.toLowerCase()))) {
+                newClusters.add(cluster);
+            }
+        }
+        model().setClusters(newClusters, searchInput);
     }
 }
