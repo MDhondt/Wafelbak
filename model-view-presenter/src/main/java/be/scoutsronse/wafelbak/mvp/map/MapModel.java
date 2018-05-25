@@ -2,12 +2,12 @@ package be.scoutsronse.wafelbak.mvp.map;
 
 import be.scoutsronse.wafelbak.mvp.Model;
 import com.sothawo.mapjfx.CoordinateLine;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static javafx.scene.paint.Color.BLUE;
 import static javafx.scene.paint.Color.RED;
 
 public class MapModel extends Model<MapView> {
@@ -28,7 +28,7 @@ public class MapModel extends Model<MapView> {
         this.borderOfRonse = borderOfRonse;
     }
 
-    void setSelectedStreets(Collection<CoordinateLine> selectedStreets) {
+    void setSelectedStreets(Collection<CoordinateLine> selectedStreets, Color color) {
         if (!this.selectedStreets.isEmpty()) {
             for (CoordinateLine street : this.selectedStreets) {
                 view().getMap().removeCoordinateLine(street);
@@ -36,7 +36,7 @@ public class MapModel extends Model<MapView> {
         }
         this.selectedStreets.clear();
         for (CoordinateLine selectedStreet : selectedStreets) {
-            selectedStreet.setColor(BLUE);
+            selectedStreet.setColor(color);
             view().getMap().addCoordinateLine(selectedStreet);
             selectedStreet.setVisible(true);
             this.selectedStreets.add(selectedStreet);

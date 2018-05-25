@@ -5,12 +5,13 @@ import be.scoutsronse.wafelbak.domain.id.ClusterId;
 import be.scoutsronse.wafelbak.mvp.Presenter;
 import be.scoutsronse.wafelbak.mvp.common.AccordionPane;
 import be.scoutsronse.wafelbak.mvp.map.MapPresenter;
+import be.scoutsronse.wafelbak.mvp.settings.SettingsPresenter;
 import be.scoutsronse.wafelbak.mvp.way.WayService;
 import be.scoutsronse.wafelbak.repository.ClusterRepository;
-import be.scoutsronse.wafelbak.tech.util.Collectors;
 import com.sothawo.mapjfx.CoordinateLine;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.TitledPane;
+import javafx.scene.paint.Color;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import static be.scoutsronse.wafelbak.tech.util.Collectors.toMapByKey;
 import static java.util.stream.Collectors.groupingBy;
 
 @Component
@@ -29,6 +31,8 @@ public class StreetOverviewPresenter extends Presenter<StreetOverviewModel, Stre
     @Inject
     private MapPresenter mapPresenter;
     @Inject
+    private SettingsPresenter settingsPresenter;
+    @Inject
     private ClusterRepository clusterRepository;
     @Inject
     private WayService wayService;
@@ -36,15 +40,16 @@ public class StreetOverviewPresenter extends Presenter<StreetOverviewModel, Stre
     @PostConstruct
     void initStreets() {
         Collection<Cluster> clusters = clusterRepository.findAll();
-        Map<ClusterId, ClusterData> clusterData = clusters.stream().map(ClusterData::new).collect(Collectors.toMapByKey(ClusterData::id));
+        Map<ClusterId, ClusterData> clusterData = clusters.stream().map(ClusterData::new).collect(toMapByKey(ClusterData::id));
         Map<ClusterId, List<StreetData>> streetData = clusters.stream().map(Cluster::streets).flatMap(Collection::stream).map(street -> new StreetData(street, wayService.findCoordinateLinesBy(street.wayIds()))).collect(groupingBy(StreetData::clusterId));
         clusterData.forEach((key, value) -> value.setStreets(streetData.get(key)));
         model().bindViewToModel();
         model().setClusters(clusterData.values());
     }
 
-    public void selectStreets(Collection<CoordinateLine> coordinateLines) {
-        mapPresenter.selectStreets(coordinateLines);
+    void selectStreets(Collection<CoordinateLine> coordinateLines) {
+        Color colour = settingsPresenter.streetOverviewColour();
+        mapPresenter.selectStreets(coordinateLines, colour);
     }
 
     public void clearSelection() {

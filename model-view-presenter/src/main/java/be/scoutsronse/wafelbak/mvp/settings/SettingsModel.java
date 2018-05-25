@@ -8,6 +8,7 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
+import javafx.scene.paint.Color;
 
 import static be.scoutsronse.wafelbak.mvp.i18n.i18n.*;
 import static javafx.scene.paint.Color.*;
@@ -49,5 +50,29 @@ public class SettingsModel extends Model<SettingsView> {
         view().colourPickerSaleOverviewPartlyDone().setValue(BLACK);
         view().colourPickerSaleOverviewPartlyDoneAndBusy().setValue(PURPLE);
         view().colourPickerSaleOverviewDone().setValue(GREEN);
+    }
+
+    Color streetOverviewColour() {
+        return view().colourPickerStreetOverview().getValue();
+    }
+
+    Color saleOverviewNotStarted() {
+        return view().colourPickerSaleOverviewNotStarted().getValue();
+    }
+
+    Color saleOverviewBusy() {
+        return view().colourPickerSaleOverviewBusy().getValue();
+    }
+
+    Color saleOverviewPartlyDone() {
+        return view().colourPickerSaleOverviewPartlyDone().getValue();
+    }
+
+    Color saleOverviewPartlyDoneAndBusy() {
+        return view().colourPickerSaleOverviewPartlyDoneAndBusy().getValue();
+    }
+
+    Color saleOverviewDone() {
+        return view().colourPickerSaleOverviewDone().getValue();
     }
 }

@@ -4,6 +4,7 @@ import be.scoutsronse.wafelbak.mvp.Presenter;
 import be.scoutsronse.wafelbak.mvp.overview.streets.StreetOverviewPresenter;
 import be.scoutsronse.wafelbak.mvp.util.OpenStreetMapUtils;
 import com.sothawo.mapjfx.CoordinateLine;
+import javafx.scene.paint.Color;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -23,10 +24,10 @@ public class MapPresenter extends Presenter<MapModel, MapView> {
         model().setBorderOfRonse(osmUtils.borderOfRonse());
     }
 
-    public void selectStreets(Collection<CoordinateLine> selectedStreets) {
+    public void selectStreets(Collection<CoordinateLine> selectedStreets, Color color) {
         if (selectedStreets.isEmpty()) {
             streetOverviewPresenter.clearSelection();
         }
-        model().setSelectedStreets(selectedStreets);
+        model().setSelectedStreets(selectedStreets, color);
     }
 }
