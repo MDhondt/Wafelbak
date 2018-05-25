@@ -42,4 +42,11 @@ public class MapModel extends Model<MapView> {
             this.selectedStreets.add(selectedStreet);
         }
     }
+
+    public void changeBorder(Color color, boolean visible) {
+        view().getMap().removeCoordinateLine(borderOfRonse);
+        borderOfRonse.setColor(color);
+        view().getMap().addCoordinateLine(borderOfRonse);
+        borderOfRonse.setVisible(visible);
+    }
 }

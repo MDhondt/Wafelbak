@@ -30,4 +30,8 @@ public class MapPresenter extends Presenter<MapModel, MapView> {
         }
         model().setSelectedStreets(selectedStreets, color);
     }
+
+    public void changeBorder(Color color, boolean visible) {
+        model().changeBorder(color, visible);
+    }
 }

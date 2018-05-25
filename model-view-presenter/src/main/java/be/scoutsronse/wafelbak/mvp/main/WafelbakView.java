@@ -63,7 +63,7 @@ public class WafelbakView extends View<WafelbakPresenter> {
         return leftTools;
     }
 
-    public void addLeftTools(AccordionPane... panes) {
+    void addLeftTools(AccordionPane... panes) {
         for (AccordionPane pane : panes) {
             accordionPaneCollapseListeners.put(pane.pane(), pane.collapseListener());
             accordionPaneExpansionListeners.put(pane.pane(), pane.expansionListener());
@@ -73,7 +73,7 @@ public class WafelbakView extends View<WafelbakPresenter> {
         mainPane.setLeft(leftTools);
     }
 
-    public void addMap(MapView map) {
+    void addMap(MapView map) {
         mainPane.setCenter(map);
     }
 }

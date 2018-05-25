@@ -2,17 +2,22 @@ package be.scoutsronse.wafelbak.mvp.settings;
 
 import be.scoutsronse.wafelbak.mvp.Presenter;
 import be.scoutsronse.wafelbak.mvp.common.AccordionPane;
+import be.scoutsronse.wafelbak.mvp.map.MapPresenter;
 import be.scoutsronse.wafelbak.tech.event.ApplicationStarted;
 import be.scoutsronse.wafelbak.tech.event.eventbus.Subscribe;
 import javafx.scene.paint.Color;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import static be.scoutsronse.wafelbak.tech.util.FXUtils.executeOnFXThread;
 
 @Component
 public class SettingsPresenter extends Presenter<SettingsModel, SettingsView> {
+
+    @Inject
+    private MapPresenter mapPresenter;
 
     @PostConstruct
     void init() {
@@ -50,5 +55,9 @@ public class SettingsPresenter extends Presenter<SettingsModel, SettingsView> {
 
     public Color saleOverviewDone() {
         return model().saleOverviewDone();
+    }
+
+    public void changeBorder(Color color, boolean visible) {
+        mapPresenter.changeBorder(color, visible);
     }
 }

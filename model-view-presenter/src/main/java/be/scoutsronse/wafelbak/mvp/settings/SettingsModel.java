@@ -17,6 +17,7 @@ public class SettingsModel extends Model<SettingsView> {
 
     private StringProperty title = new SimpleStringProperty();
     private StringProperty colours = new SimpleStringProperty();
+    private StringProperty boder = new SimpleStringProperty();
 
     public SettingsModel(SettingsView view) {
         super(view);
@@ -25,15 +26,18 @@ public class SettingsModel extends Model<SettingsView> {
     void bindViewToModel() {
         view().titleProperty().bind(title);
         view().coloursProperty().bind(colours);
+        view().borderProperty().bind(boder);
         view().colourPickerStreetOverview().skinProperty().addListener(getSkinChangeListener(COLOUR_PICKER_STREET_GENERAL));
         view().colourPickerSaleOverviewNotStarted().skinProperty().addListener(getSkinChangeListener(COLOUR_PICKER_SALE_NOT_STARTED));
         view().colourPickerSaleOverviewBusy().skinProperty().addListener(getSkinChangeListener(COLOUR_PICKER_SALE_BUSY));
         view().colourPickerSaleOverviewPartlyDone().skinProperty().addListener(getSkinChangeListener(COLOUR_PICKER_SALE_PARTLY_DONE));
         view().colourPickerSaleOverviewPartlyDoneAndBusy().skinProperty().addListener(getSkinChangeListener(COLOUR_PICKER_SALE_PARTLY_DONE_AND_BUSY));
         view().colourPickerSaleOverviewDone().skinProperty().addListener(getSkinChangeListener(COLOUR_PICKER_SALE_DONE));
+        view().colourPickerBorder().skinProperty().addListener(getSkinChangeListener(COLOUR_PICKER_BORDER));
 
         title.setValue(view().message(SETTINGS_TITLE));
         colours.setValue(view().message(SETTING_COLOURS));
+        boder.setValue(view().message(SETTING_BORDER));
     }
 
     private ChangeListener<Skin<?>> getSkinChangeListener(i18n text) {
@@ -50,6 +54,7 @@ public class SettingsModel extends Model<SettingsView> {
         view().colourPickerSaleOverviewPartlyDone().setValue(BLACK);
         view().colourPickerSaleOverviewPartlyDoneAndBusy().setValue(PURPLE);
         view().colourPickerSaleOverviewDone().setValue(GREEN);
+        view().colourPickerBorder().setValue(RED);
     }
 
     Color streetOverviewColour() {
