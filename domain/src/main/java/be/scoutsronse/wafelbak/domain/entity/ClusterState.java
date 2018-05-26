@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 
+import static be.scoutsronse.wafelbak.domain.ClusterStatus.NOT_STARTED;
 import static be.scoutsronse.wafelbak.domain.id.ClusterStateId.aClusterStateId;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.EAGER;
@@ -27,6 +28,14 @@ public class ClusterState extends AbstractEntity<ClusterStateId> {
     private Collection<Sale> sales;
 
     private ClusterState() {}
+
+    ClusterState(Number year, Cluster cluster) {
+        this.year = year.shortValue();
+        this.cluster = cluster;
+        this.status = NOT_STARTED;
+        this.streetsDone = new HashSet<>();
+        this.sales = new HashSet<>();
+    }
 
     @Override
     public ClusterStateId id() {
@@ -47,6 +56,10 @@ public class ClusterState extends AbstractEntity<ClusterStateId> {
 
     public Collection<Sale> sales() {
         return new HashSet<>(sales);
+    }
+
+    public Integer year() {
+        return year.intValue();
     }
 
     @Override

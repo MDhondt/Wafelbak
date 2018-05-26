@@ -76,4 +76,8 @@ public class WafelbakView extends View<WafelbakPresenter> {
     void addMap(MapView map) {
         mainPane.setCenter(map);
     }
+
+    Stage mainStage() {
+        return mainStage;
+    }
 }

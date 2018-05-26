@@ -7,6 +7,7 @@ import javax.persistence.OneToMany;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 
 import static be.scoutsronse.wafelbak.domain.id.ClusterId.aClusterId;
 import static javax.persistence.CascadeType.PERSIST;
@@ -18,7 +19,7 @@ public class Cluster extends AbstractEntity<ClusterId> {
     private String name;
     @OneToMany(fetch = EAGER, cascade = PERSIST)
     private Collection<Street> streets;
-    @OneToMany(fetch = EAGER)
+    @OneToMany(fetch = EAGER, cascade = PERSIST)
     private Collection<ClusterState> states;
 
     private Cluster() {}
@@ -45,6 +46,20 @@ public class Cluster extends AbstractEntity<ClusterId> {
 
     public Collection<ClusterState> states() {
         return new HashSet<>(states);
+    }
+
+    public ClusterState addNewState(Integer year) {
+        ClusterState state = new ClusterState(year, this);
+        this.states.add(state);
+        return state;
+    }
+
+    public Optional<ClusterState> removeState(Integer year) {
+        Optional<ClusterState> state = this.states.stream()
+                                                .filter(s -> s.year().equals(year))
+                                                .findAny();
+        state.ifPresent(s -> this.states.remove(s));
+        return state;
     }
 
     @Override
