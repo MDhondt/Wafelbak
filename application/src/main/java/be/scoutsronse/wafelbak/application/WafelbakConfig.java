@@ -7,8 +7,10 @@ import be.scoutsronse.wafelbak.repository.config.RepositoryConfig;
 import be.scoutsronse.wafelbak.tech.config.TechConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 
 @Configuration
+@PropertySource("classpath:application.properties")
 @Import({MVPConfig.class,
         RepositoryConfig.class,
         DatabaseConfig.class,

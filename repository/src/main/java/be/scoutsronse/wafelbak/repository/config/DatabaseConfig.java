@@ -1,5 +1,6 @@
 package be.scoutsronse.wafelbak.repository.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -17,10 +18,10 @@ import static org.springframework.orm.jpa.vendor.Database.H2;
 public class DatabaseConfig {
 
     @Bean
-    public DataSource dataSource() {
+    public DataSource dataSource(@Value("${db.path}") String dbPath) {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.h2.Driver");
-        dataSource.setUrl("jdbc:h2:~/Wafelbak/db/WafelbakDb");
+        dataSource.setUrl("jdbc:h2:" + dbPath);
         dataSource.setUsername("admin");
         dataSource.setPassword("admin");
 

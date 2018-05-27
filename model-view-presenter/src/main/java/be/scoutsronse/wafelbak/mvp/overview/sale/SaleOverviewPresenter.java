@@ -5,9 +5,11 @@ import be.scoutsronse.wafelbak.domain.entity.ClusterState;
 import be.scoutsronse.wafelbak.mvp.Presenter;
 import be.scoutsronse.wafelbak.mvp.common.AccordionPane;
 import be.scoutsronse.wafelbak.mvp.main.WafelbakPresenter;
+import be.scoutsronse.wafelbak.mvp.util.CurrentSaleService;
 import be.scoutsronse.wafelbak.repository.ClusterRepository;
 import be.scoutsronse.wafelbak.repository.ClusterStateRepository;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -16,6 +18,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import static be.scoutsronse.wafelbak.tech.util.Collectors.toReversedList;
+import static java.lang.System.getProperty;
 import static java.time.LocalDate.now;
 
 @Component
@@ -27,6 +31,11 @@ public class SaleOverviewPresenter extends Presenter<SaleOverviewModel, SaleOver
     private ClusterRepository clusterRepository;
     @Inject
     private ClusterStateRepository clusterStateRepository;
+    @Inject
+    private CurrentSaleService currentSaleService;
+
+    @Value("${db.path}")
+    private String dbPath;
 
     @PostConstruct
     void init() {
@@ -61,6 +70,24 @@ public class SaleOverviewPresenter extends Presenter<SaleOverviewModel, SaleOver
             clusterStateRepository.save(newState);
         });
         clusterRepository.saveAll(allClusters);
+        currentSaleService.setCurrentYear(year);
         return true;
+    }
+
+    public List<Integer> existingSales() {
+        return clusterRepository.findAll().stream()
+                                .map(Cluster::states).flatMap(Collection::stream)
+                                .map(ClusterState::year)
+                                .distinct()
+                                .sorted()
+                                .collect(toReversedList());
+    }
+
+    public String dbPath() {
+        return dbPath.replaceFirst("^~", getProperty("user.home").replace("\\", "\\\\")).replace("/", "\\") + ".mv.db";
+    }
+
+    public void setCurrentSale(Integer year) {
+        currentSaleService.setCurrentYear(year);
     }
 }
