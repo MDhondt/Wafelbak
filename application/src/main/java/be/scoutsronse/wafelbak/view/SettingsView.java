@@ -1,6 +1,11 @@
 package be.scoutsronse.wafelbak.view;
 
+import be.scoutsronse.wafelbak.i18n.MessageTag;
 import be.scoutsronse.wafelbak.presenter.SettingsPresenter;
+import be.scoutsronse.wafelbak.view.model.SettingsModel;
+import com.sun.javafx.scene.control.skin.ColorPickerSkin;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
@@ -10,13 +15,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import org.controlsfx.control.ToggleSwitch;
+import org.springframework.context.MessageSource;
 
+import java.util.List;
+
+import static be.scoutsronse.wafelbak.i18n.MessageTag.*;
+import static java.util.Arrays.asList;
 import static javafx.scene.text.Font.font;
 import static javafx.scene.text.FontWeight.BOLD;
 import static org.controlsfx.tools.Borders.wrap;
 
-public class SettingsView {
+public class SettingsView extends AbstractView {
 
+    private SettingsPresenter presenter;
     private TitledPane pane;
     private Label colours;
     private Label border;
@@ -27,67 +38,82 @@ public class SettingsView {
     private ColorPicker borderColour;
     private ToggleSwitch toggleSwitch;
 
-    public SettingsView(SettingsPresenter presenter) {
+    public SettingsView(SettingsPresenter presenter, SettingsModel model, MessageSource messageSource) {
+        super(messageSource);
+        this.presenter = presenter;
 
-        VBox vBox = new VBox(5);
-        colours = new Label();
-        colours.setFont(font(colours.getFont().getFamily(), BOLD, colours.getFont().getSize()));
-        border = new Label();
-        border.setFont(font(border.getFont().getFamily(), BOLD, border.getFont().getSize()));
-        toggleSwitch = new ToggleSwitch();
-        toggleSwitch.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && newValue) {
-                toggleSwitch.setText("Aan");
-            } else {
-                toggleSwitch.setText("Uit");
-            }
-            changeBorder(borderColour.getValue(), newValue != null && newValue);
-        });
-
-        streetOverviewColour = new ColorPicker();
-        streetOverviewColour.prefWidthProperty().bind(vBox.widthProperty());
-        streetOverviewColour.setMaxWidth(200);
-        saleOverviewBusyColour = new ColorPicker();
-        saleOverviewBusyColour.prefWidthProperty().bind(vBox.widthProperty());
-        saleOverviewBusyColour.setMaxWidth(200);
-        saleOverviewNotStartedColour = new ColorPicker();
-        saleOverviewNotStartedColour.prefWidthProperty().bind(vBox.widthProperty());
-        saleOverviewNotStartedColour.setMaxWidth(200);
-        saleOverviewDoneColour = new ColorPicker();
-        saleOverviewDoneColour.prefWidthProperty().bind(vBox.widthProperty());
-        saleOverviewDoneColour.setMaxWidth(200);
-        borderColour = new ColorPicker();
-        borderColour.prefWidthProperty().bind(vBox.widthProperty());
-        borderColour.setMaxWidth(200);
-        toggleSwitch.setSelected(true);
-        borderColour.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                changeBorder(newValue, toggleSwitch.isSelected());
-            }
-        });
-
-        Node streetOverviewBox = wrap(streetOverviewColour).lineBorder().title("Overzicht verkoop").buildAll();
-        VBox saleOverviewGroup = new VBox(5);
-        saleOverviewGroup.getChildren().addAll(saleOverviewNotStartedColour, saleOverviewBusyColour, saleOverviewPartlyDoneColour, saleOverviewPartlyDoneAndBusyColour, saleOverviewDoneColour);
-        Node saleOverviewBox = wrap(saleOverviewGroup).lineBorder().title("Overzicht straten").buildAll();
-        VBox borderGroup = new VBox(5);
-        borderGroup.getChildren().addAll(borderColour, new HBox(toggleSwitch));
-        Node borderBox = wrap(borderGroup).lineBorder().buildAll();
         VBox empty = new VBox();
         empty.setMinHeight(20);
-        vBox.getChildren().addAll(
-                colours,
-                streetOverviewBox,
-                saleOverviewBox,
-                empty,
-                border,
-                borderBox);
 
-        pane = new TitledPane();
-        pane.setContent(vBox);
+        VBox content = new VBox(5);
+        content.getChildren().addAll(buildStreetColourSelectionMenu(model, content.widthProperty()));
+        content.getChildren().add(empty);
+        content.getChildren().addAll(buildBorderSelectionMenu(model, content.widthProperty()));
+
+        pane = new TitledPane(message(SETTINGS_TITLE), content);
     }
 
-    TitledPane getPane() {
+    private List<Node> buildStreetColourSelectionMenu(SettingsModel model, ReadOnlyDoubleProperty menuWidth) {
+        colours = new Label(message(SETTING_COLOURS));
+        colours.setFont(font(colours.getFont().getFamily(), BOLD, colours.getFont().getSize()));
+
+        streetOverviewColour = createColourPicker(COLOUR_PICKER_STREET_GENERAL, model.streetOverviewColourProperty(), menuWidth);
+        Node streetOverviewBorderedBox = wrap(streetOverviewColour).lineBorder().title(message(STREET_OVERVIEW_TITLE)).buildAll();
+
+        saleOverviewNotStartedColour = createColourPicker(COLOUR_PICKER_SALE_NOT_STARTED, model.saleOverviewNotStartedColourProperty(), menuWidth);
+        saleOverviewBusyColour = createColourPicker(COLOUR_PICKER_SALE_BUSY, model.saleOverviewBusyColourProperty(), menuWidth);
+        saleOverviewDoneColour = createColourPicker(COLOUR_PICKER_SALE_DONE, model.saleOverviewDoneColourProperty(), menuWidth);
+        VBox saleOverviewBox = new VBox(5);
+        saleOverviewBox.getChildren().addAll(saleOverviewNotStartedColour, saleOverviewBusyColour, saleOverviewDoneColour);
+        Node saleOverviewBorderedBox = wrap(saleOverviewBox).lineBorder().title(message(SALE_OVERVIEW_TITLE)).buildAll();
+
+        return asList(colours, streetOverviewBorderedBox, saleOverviewBorderedBox);
+    }
+
+    private List<Node> buildBorderSelectionMenu(SettingsModel model, ReadOnlyDoubleProperty menuWidth) {
+        border = new Label(message(SETTING_BORDER));
+        border.setFont(font(border.getFont().getFamily(), BOLD, border.getFont().getSize()));
+
+        borderColour = createColourPicker(COLOUR_PICKER_BORDER, model.borderColourProperty(), menuWidth);
+        toggleSwitch = new ToggleSwitch();
+        toggleSwitch.selectedProperty().bindBidirectional(model.borderVisibilityProperty());
+        toggleSwitch.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && newValue) {
+                toggleSwitch.setText(message(ON));
+            } else {
+                toggleSwitch.setText(message(OFF));
+            }
+            changeBorder();
+        });
+        borderColour.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                changeBorder();
+            }
+        });
+        VBox borderBox = new VBox(5);
+        borderBox.getChildren().addAll(borderColour, new HBox(toggleSwitch));
+        Node borderBorderedBox = wrap(borderBox).lineBorder().buildAll();
+
+        return asList(border, borderBorderedBox);
+    }
+
+    private ColorPicker createColourPicker(MessageTag text, ObjectProperty<Color> colourProperty, ReadOnlyDoubleProperty menuWidth) {
+        ColorPicker colourPicker = new ColorPicker();
+        colourPicker.prefWidthProperty().bind(menuWidth);
+        colourPicker.setMaxWidth(200);
+        colourPicker.skinProperty().addListener((observable, oldSkin, newSkin) -> {
+            ((Label) ((ColorPickerSkin) newSkin).getDisplayNode()).textProperty().addListener(
+                    (observable1, oldValue1, newValue1) -> ((Label) ((ColorPickerSkin) newSkin).getDisplayNode()).textProperty().setValue(message(text)));
+        });
+        colourPicker.valueProperty().bindBidirectional(colourProperty);
+        return colourPicker;
+    }
+
+    private void changeBorder() {
+        presenter.changeBorder();
+    }
+
+    public TitledPane getPane() {
         return pane;
     }
 
@@ -115,23 +141,11 @@ public class SettingsView {
         return saleOverviewBusyColour;
     }
 
-    ColorPicker colourPickerSaleOverviewPartlyDone() {
-        return saleOverviewPartlyDoneColour;
-    }
-
-    ColorPicker colourPickerSaleOverviewPartlyDoneAndBusy() {
-        return saleOverviewPartlyDoneAndBusyColour;
-    }
-
     ColorPicker colourPickerSaleOverviewDone() {
         return saleOverviewDoneColour;
     }
 
     ColorPicker colourPickerBorder() {
         return borderColour;
-    }
-
-    private void changeBorder(Color color, boolean visible) {
-        presenter().changeBorder(color, visible);
     }
 }

@@ -1,17 +1,11 @@
 package be.scoutsronse.wafelbak.view.model;
 
-import be.scoutsronse.wafelbak.i18n.MessageTag;
-import com.sun.javafx.scene.control.skin.ColorPickerSkin;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.scene.control.Label;
-import javafx.scene.control.Skin;
 import javafx.scene.paint.Color;
 
-import static be.scoutsronse.wafelbak.i18n.MessageTag.*;
 import static java.lang.Boolean.TRUE;
 import static javafx.scene.paint.Color.*;
 
@@ -24,52 +18,51 @@ public class SettingsModel {
     private ObjectProperty<Color> borderColour = new SimpleObjectProperty<>(RED);
     private BooleanProperty borderVisibility = new SimpleBooleanProperty(TRUE);
 
-    void bindViewToModel() {
-        view().colourPickerStreetOverview().skinProperty().addListener(getSkinChangeListener(COLOUR_PICKER_STREET_GENERAL));
-        view().colourPickerSaleOverviewNotStarted().skinProperty().addListener(getSkinChangeListener(COLOUR_PICKER_SALE_NOT_STARTED));
-        view().colourPickerSaleOverviewBusy().skinProperty().addListener(getSkinChangeListener(COLOUR_PICKER_SALE_BUSY));
-        view().colourPickerSaleOverviewDone().skinProperty().addListener(getSkinChangeListener(COLOUR_PICKER_SALE_DONE));
-        view().colourPickerBorder().skinProperty().addListener(getSkinChangeListener(COLOUR_PICKER_BORDER));
+    public Color getStreetOverviewColour() {
+        return streetOverviewColour.get();
     }
 
-    private ChangeListener<Skin<?>> getSkinChangeListener(MessageTag text) {
-        return (observable, oldSkin, newSkin) -> {
-            ((Label) ((ColorPickerSkin) newSkin).getDisplayNode()).textProperty().addListener(
-                    (observable1, oldValue1, newValue1) -> ((Label) ((ColorPickerSkin) newSkin).getDisplayNode()).textProperty().setValue(SettingsModel.this.view().message(text)));
-        };
+    public ObjectProperty<Color> streetOverviewColourProperty() {
+        return streetOverviewColour;
     }
 
-    void initSelectionColours() {
-        view().colourPickerStreetOverview().setValue(BLUE);
-        view().colourPickerSaleOverviewNotStarted().setValue(YELLOW);
-        view().colourPickerSaleOverviewBusy().setValue(ORANGE);
-        view().colourPickerSaleOverviewPartlyDone().setValue(BLACK);
-        view().colourPickerSaleOverviewPartlyDoneAndBusy().setValue(PURPLE);
-        view().colourPickerSaleOverviewDone().setValue(GREEN);
-        view().colourPickerBorder().setValue(RED);
+    public Color getSaleOverviewNotStartedColour() {
+        return saleOverviewNotStartedColour.get();
     }
 
-    Color streetOverviewColour() {
-        return view().colourPickerStreetOverview().getValue();
+    public ObjectProperty<Color> saleOverviewNotStartedColourProperty() {
+        return saleOverviewNotStartedColour;
     }
 
-    Color saleOverviewNotStarted() {
-        return view().colourPickerSaleOverviewNotStarted().getValue();
+    public Color getSaleOverviewBusyColour() {
+        return saleOverviewBusyColour.get();
     }
 
-    Color saleOverviewBusy() {
-        return view().colourPickerSaleOverviewBusy().getValue();
+    public ObjectProperty<Color> saleOverviewBusyColourProperty() {
+        return saleOverviewBusyColour;
     }
 
-    Color saleOverviewPartlyDone() {
-        return view().colourPickerSaleOverviewPartlyDone().getValue();
+    public Color getSaleOverviewDoneColour() {
+        return saleOverviewDoneColour.get();
     }
 
-    Color saleOverviewPartlyDoneAndBusy() {
-        return view().colourPickerSaleOverviewPartlyDoneAndBusy().getValue();
+    public ObjectProperty<Color> saleOverviewDoneColourProperty() {
+        return saleOverviewDoneColour;
     }
 
-    Color saleOverviewDone() {
-        return view().colourPickerSaleOverviewDone().getValue();
+    public Color getBorderColour() {
+        return borderColour.get();
+    }
+
+    public ObjectProperty<Color> borderColourProperty() {
+        return borderColour;
+    }
+
+    public boolean isBorderVisible() {
+        return borderVisibility.get();
+    }
+
+    public BooleanProperty borderVisibilityProperty() {
+        return borderVisibility;
     }
 }
