@@ -42,11 +42,7 @@
 
     <modules>
         <module>application</module>
-        <module>domain</module>
         <module>misc</module>
-        <module>model-view-presenter</module>
-        <module>osm</module>
-        <module>repository</module>
     </modules>
 
     <dependencies>
@@ -76,32 +72,7 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>domain</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>map</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
                 <artifactId>misc</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>model-view-presenter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>osm</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>repository</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
