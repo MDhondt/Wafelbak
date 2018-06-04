@@ -16,6 +16,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
+import static javafx.geometry.Pos.TOP_CENTER;
 import static org.controlsfx.control.textfield.TextFields.createClearableTextField;
 
 public class SearchableClusterTreeView extends VBox {
@@ -23,7 +24,7 @@ public class SearchableClusterTreeView extends VBox {
     private TextField searchBox;
     private TreeView<ClusterItem> treeView;
     private Collection<ClusterDto> allClusters;
-    private Collection<ClusterDto> visibleClusters = new TreeSet<>();
+    private TreeSet<ClusterDto> visibleClusters = new TreeSet<>(comparing(cluster -> cluster.name));
 
     public SearchableClusterTreeView(Consumer<Collection<StreetId>> selectionConsumer) {
         super(5);
@@ -54,13 +55,17 @@ public class SearchableClusterTreeView extends VBox {
         });
 
         getChildren().addAll(searchBox, treeView);
+        setAlignment(TOP_CENTER);
         treeView.prefHeightProperty().bind(this.heightProperty());
+        treeView.prefWidthProperty().bind(this.widthProperty());
+        searchBox.minWidthProperty().bind(treeView.widthProperty());
         searchBox.prefWidthProperty().bind(treeView.widthProperty());
+        searchBox.maxWidthProperty().bind(treeView.widthProperty());
     }
 
     public void setContent(Collection<ClusterDto> clusters) {
         this.allClusters = new ArrayList<>(clusters);
-        this.visibleClusters = new ArrayList<>(clusters);
+        this.visibleClusters = new TreeSet<>(clusters);
         setVisibleClusters("DO_NOT_EXPAND");
     }
 
