@@ -11,7 +11,7 @@ import static java.util.Objects.hash;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 
-public class ClusterDto {
+public class ClusterDto implements Comparable {
 
     public final ClusterId id;
     public final String name;
@@ -21,6 +21,11 @@ public class ClusterDto {
         this.id = cluster.id();
         this.name = cluster.name();
         this.streets = cluster.streets().stream().map(StreetDto::new).collect(collectingAndThen(toSet(), Collections::unmodifiableCollection));
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return name.compareTo(((ClusterDto) o).name);
     }
 
     @Override

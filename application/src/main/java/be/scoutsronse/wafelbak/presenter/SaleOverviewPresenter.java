@@ -1,9 +1,7 @@
-package be.scoutsronse.wafelbak.mvp.overview.sale;
+package be.scoutsronse.wafelbak.presenter;
 
 import be.scoutsronse.wafelbak.domain.entity.Cluster;
 import be.scoutsronse.wafelbak.domain.entity.ClusterState;
-import be.scoutsronse.wafelbak.mvp.Presenter;
-import be.scoutsronse.wafelbak.presenter.WafelbakPresenter;
 import be.scoutsronse.wafelbak.repository.ClusterRepository;
 import be.scoutsronse.wafelbak.repository.ClusterStateRepository;
 import be.scoutsronse.wafelbak.service.OpenedSaleService;
@@ -23,7 +21,7 @@ import static java.lang.System.getProperty;
 import static java.time.LocalDate.now;
 
 @Component
-public class SaleOverviewPresenter extends Presenter<SaleOverviewModel, SaleOverviewView> {
+public class SaleOverviewPresenter {
 
     @Inject
     private WafelbakPresenter wafelbakPresenter;

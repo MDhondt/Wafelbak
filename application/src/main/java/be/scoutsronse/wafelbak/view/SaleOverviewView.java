@@ -1,6 +1,6 @@
-package be.scoutsronse.wafelbak.mvp.overview.sale;
+package be.scoutsronse.wafelbak.view;
 
-import be.scoutsronse.wafelbak.mvp.View;
+import be.scoutsronse.wafelbak.presenter.SaleOverviewPresenter;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -16,7 +16,7 @@ import static javafx.scene.control.Alert.AlertType.INFORMATION;
 import static javafx.scene.control.ButtonBar.ButtonData.OTHER;
 import static javafx.stage.Modality.WINDOW_MODAL;
 
-public class SaleOverviewView extends View<SaleOverviewPresenter> {
+public class SaleOverviewView {
 
     private TitledPane pane;
     private VBox unopenedSale;

@@ -1,12 +1,12 @@
-package be.scoutsronse.wafelbak.mvp.overview.sale;
+package be.scoutsronse.wafelbak.view.model;
 
-import be.scoutsronse.wafelbak.mvp.Model;
+import be.scoutsronse.wafelbak.view.SaleOverviewView;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import static be.scoutsronse.wafelbak.i18n.MessageTag.SALE_OVERVIEW_TITLE;
 
-public class SaleOverviewModel extends Model<SaleOverviewView> {
+public class SaleOverviewModel {
 
     private StringProperty title = new SimpleStringProperty();
 

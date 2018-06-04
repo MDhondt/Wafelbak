@@ -7,4 +7,8 @@ abstract class ClusterItem {
     public ClusterItem(String name) {
         this.name = name;
     }
+
+    public String getName() {
+        return name;
+    }
 }

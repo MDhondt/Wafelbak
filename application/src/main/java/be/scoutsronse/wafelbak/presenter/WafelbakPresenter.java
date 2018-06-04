@@ -1,7 +1,5 @@
 package be.scoutsronse.wafelbak.presenter;
 
-import be.scoutsronse.wafelbak.mvp.overview.sale.SaleOverviewPresenter;
-import be.scoutsronse.wafelbak.mvp.overview.streets.StreetOverviewPresenter;
 import be.scoutsronse.wafelbak.view.WafelbakView;
 import javafx.stage.Stage;
 import org.springframework.stereotype.Component;
@@ -31,6 +29,7 @@ public class WafelbakPresenter {
         view.setStage(mainStage);
 
         mapPresenter.init();
+        streetOverviewPresenter.init();
         settingsPresenter.init();
 
         view.addLeftTools(streetOverviewPresenter.pane(),
