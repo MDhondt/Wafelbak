@@ -30,10 +30,11 @@ public class WafelbakPresenter {
 
         mapPresenter.init();
         streetOverviewPresenter.init();
+        saleOverviewPresenter.init(mainStage);
         settingsPresenter.init();
 
         view.addLeftTools(streetOverviewPresenter.pane(),
-//                          saleOverviewPresenter.pane(),
+                          saleOverviewPresenter.pane(),
                           settingsPresenter.pane());
         view.addMap(mapPresenter.getMap());
 
