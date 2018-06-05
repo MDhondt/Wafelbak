@@ -74,6 +74,11 @@ public class SearchableClusterTreeView extends VBox {
         this.treeView.getSelectionModel().clearSelection();
     }
 
+    public void setContentOpacity(double opacity) {
+        this.searchBox.setOpacity(opacity);
+        this.treeView.setOpacity(opacity);
+    }
+
     private void setVisibleClusters(String expansionName) {
         treeView.getRoot().getChildren().clear();
         visibleClusters.forEach(visibleCluster -> {

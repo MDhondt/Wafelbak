@@ -42,6 +42,6 @@ public class SettingsPresenter {
 
     @Subscribe
     public void initializeColourPickers(ApplicationStarted event) {
-        FXUtils.executeOnFXThread(() -> model.resetColourPickers());
+        FXUtils.executeOnFXThread(() -> model.setDefaultValues());
     }
 }

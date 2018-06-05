@@ -1,20 +1,30 @@
 package be.scoutsronse.wafelbak.view;
 
 import be.scoutsronse.wafelbak.presenter.SaleOverviewPresenter;
+import be.scoutsronse.wafelbak.view.component.treeview.SearchableClusterTreeView;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import org.springframework.context.MessageSource;
 
 import java.util.List;
 import java.util.Optional;
 
+import static be.scoutsronse.wafelbak.domain.ClusterStatus.NOT_STARTED;
 import static be.scoutsronse.wafelbak.i18n.MessageTag.*;
+import static be.scoutsronse.wafelbak.tech.util.FXUtils.executeOnFXThread;
 import static java.time.LocalDate.now;
+import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
 import static javafx.scene.control.Alert.AlertType.INFORMATION;
 import static javafx.scene.control.ButtonBar.ButtonData.OTHER;
+import static javafx.scene.paint.Color.BLACK;
 import static javafx.stage.Modality.WINDOW_MODAL;
 
 public class SaleOverviewView extends AbstractView {
@@ -45,8 +55,8 @@ public class SaleOverviewView extends AbstractView {
         empty.setPrefHeight(20);
         vBox.getChildren().addAll(empty, open, start);
 
-        open.prefWidthProperty().bind(vBox.widthProperty().subtract(80));
-        start.prefWidthProperty().bind(vBox.widthProperty().subtract(80));
+        open.prefWidthProperty().bind(vBox.widthProperty().subtract(100));
+        start.prefWidthProperty().bind(vBox.widthProperty().subtract(100));
 
         open.setOnAction(event -> {
             List<Integer> existingSales = presenter.existingSales();
@@ -85,7 +95,35 @@ public class SaleOverviewView extends AbstractView {
     }
 
     private void populateOpenSale() {
+        executeOnFXThread(() -> {
+            openedSale = new VBox();
+            openedSale.setAlignment(TOP_CENTER);
 
+            HBox notStarted = new HBox();
+            notStarted.setAlignment(CENTER);
+
+            StackPane stackPane = new StackPane();
+            Rectangle rectangle = new Rectangle(200, 250, Paint.valueOf("#235478"));
+            rectangle.setArcHeight(10);
+            rectangle.setArcWidth(10);
+            DropShadow shadow = new DropShadow(5, 1, 1, BLACK);
+            rectangle.setEffect(shadow);
+
+            SearchableClusterTreeView notStartedTree = new SearchableClusterTreeView(streets -> System.out.println("TODO"));
+            notStartedTree.setContentOpacity(0.8);
+            notStartedTree.setContent(presenter.getClustersFor(NOT_STARTED));
+            notStartedTree.minHeightProperty().bind(rectangle.heightProperty().subtract(6));
+            notStartedTree.prefHeightProperty().bind(rectangle.heightProperty().subtract(6));
+            notStartedTree.maxHeightProperty().bind(rectangle.heightProperty().subtract(6));
+            notStartedTree.minWidthProperty().bind(rectangle.widthProperty().subtract(4));
+            notStartedTree.prefWidthProperty().bind(rectangle.widthProperty().subtract(4));
+            notStartedTree.maxWidthProperty().bind(rectangle.widthProperty().subtract(4));
+
+            stackPane.getChildren().addAll(rectangle, notStartedTree);
+
+            notStarted.getChildren().add(stackPane);
+            openedSale.getChildren().add(notStarted);
+        });
     }
 
     public TitledPane getPane() {

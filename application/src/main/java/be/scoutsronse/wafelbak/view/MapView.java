@@ -14,7 +14,7 @@ import static java.lang.Double.MAX_VALUE;
 import static java.lang.System.getProperty;
 import static java.nio.file.Files.createDirectories;
 import static java.nio.file.Paths.get;
-import static javafx.scene.paint.Color.RED;
+import static javafx.scene.paint.Color.BLACK;
 
 public class MapView {
 
@@ -31,7 +31,7 @@ public class MapView {
             if (newValue) {
                 map.setZoom(14);
                 map.setCenter(new Coordinate(50.748, 3.6078));
-                changeBorder(RED, true);
+                changeBorder(BLACK, true);
             }
         });
 

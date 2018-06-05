@@ -16,14 +16,15 @@ public class SettingsModel {
     private ObjectProperty<Color> saleOverviewBusyColour = new SimpleObjectProperty<>();
     private ObjectProperty<Color> saleOverviewDoneColour = new SimpleObjectProperty<>();
     private ObjectProperty<Color> borderColour = new SimpleObjectProperty<>();
-    private BooleanProperty borderVisibility = new SimpleBooleanProperty(TRUE);
+    private BooleanProperty borderVisibility = new SimpleBooleanProperty();
 
-    public void resetColourPickers() {
+    public void setDefaultValues() {
         streetOverviewColour.setValue(BLUE);
         saleOverviewNotStartedColour.setValue(RED);
         saleOverviewBusyColour.setValue(ORANGE);
         saleOverviewDoneColour.setValue(GREEN);
         borderColour.setValue(BLACK);
+        borderVisibility.setValue(TRUE);
     }
 
     public Color getStreetOverviewColour() {

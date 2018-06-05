@@ -53,7 +53,9 @@ public class SettingsView extends AbstractView {
         colours.setFont(font(colours.getFont().getFamily(), BOLD, colours.getFont().getSize()));
 
         ColorPicker streetOverviewColour = createColourPicker(COLOUR_PICKER_STREET_GENERAL, model.streetOverviewColourProperty(), menuWidth);
-        Node streetOverviewBorderedBox = wrap(streetOverviewColour).lineBorder().title(message(STREET_OVERVIEW_TITLE)).buildAll();
+        VBox streetOverviewBox = new VBox(5);
+        streetOverviewBox.getChildren().addAll(streetOverviewColour);
+        Node streetOverviewBorderedBox = wrap(streetOverviewBox).lineBorder().title(message(STREET_OVERVIEW_TITLE)).buildAll();
 
         ColorPicker saleOverviewNotStartedColour = createColourPicker(COLOUR_PICKER_SALE_NOT_STARTED, model.saleOverviewNotStartedColourProperty(), menuWidth);
         ColorPicker saleOverviewBusyColour = createColourPicker(COLOUR_PICKER_SALE_BUSY, model.saleOverviewBusyColourProperty(), menuWidth);
@@ -95,7 +97,7 @@ public class SettingsView extends AbstractView {
     private ColorPicker createColourPicker(MessageTag text, ObjectProperty<Color> colourProperty, ReadOnlyDoubleProperty menuWidth) {
         ColorPicker colourPicker = new ColorPicker();
         colourPicker.prefWidthProperty().bind(menuWidth);
-        colourPicker.setMaxWidth(200);
+        colourPicker.setMaxWidth(225);
         colourPicker.skinProperty().addListener((observable, oldSkin, newSkin) -> {
             ((Label) ((ColorPickerSkin) newSkin).getDisplayNode()).textProperty().addListener(
                     (observable1, oldValue1, newValue1) -> ((Label) ((ColorPickerSkin) newSkin).getDisplayNode()).textProperty().setValue(message(text)));

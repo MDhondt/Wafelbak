@@ -1,5 +1,7 @@
 package be.scoutsronse.wafelbak.presenter;
 
+import be.scoutsronse.wafelbak.domain.ClusterStatus;
+import be.scoutsronse.wafelbak.domain.dto.ClusterDto;
 import be.scoutsronse.wafelbak.domain.entity.Cluster;
 import be.scoutsronse.wafelbak.domain.entity.ClusterState;
 import be.scoutsronse.wafelbak.repository.ClusterRepository;
@@ -20,6 +22,7 @@ import java.util.Optional;
 import static be.scoutsronse.wafelbak.tech.util.Collectors.toReversedList;
 import static java.lang.System.getProperty;
 import static java.time.LocalDate.now;
+import static java.util.stream.Collectors.toList;
 
 @Component
 public class SaleOverviewPresenter {
@@ -85,5 +88,13 @@ public class SaleOverviewPresenter {
 
     public void setCurrentSale(Integer year) {
         openedSaleService.setCurrentYear(year);
+    }
+
+    public Collection<ClusterDto> getClustersFor(ClusterStatus status) {
+        return clusterRepository.findAll().stream()
+                                .filter(cluster -> cluster.states().stream()
+                                                          .anyMatch(state -> state.year().equals(openedSaleService.getCurrentYear()) && state.status().equals(status)))
+                                .map(ClusterDto::new)
+                                .collect(toList());
     }
 }
