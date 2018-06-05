@@ -11,12 +11,20 @@ import static javafx.scene.paint.Color.*;
 
 public class SettingsModel {
 
-    private ObjectProperty<Color> streetOverviewColour = new SimpleObjectProperty<>(BLUE);
-    private ObjectProperty<Color> saleOverviewNotStartedColour = new SimpleObjectProperty<>(RED);
-    private ObjectProperty<Color> saleOverviewBusyColour = new SimpleObjectProperty<>(ORANGE);
-    private ObjectProperty<Color> saleOverviewDoneColour = new SimpleObjectProperty<>(GREEN);
-    private ObjectProperty<Color> borderColour = new SimpleObjectProperty<>(RED);
+    private ObjectProperty<Color> streetOverviewColour = new SimpleObjectProperty<>();
+    private ObjectProperty<Color> saleOverviewNotStartedColour = new SimpleObjectProperty<>();
+    private ObjectProperty<Color> saleOverviewBusyColour = new SimpleObjectProperty<>();
+    private ObjectProperty<Color> saleOverviewDoneColour = new SimpleObjectProperty<>();
+    private ObjectProperty<Color> borderColour = new SimpleObjectProperty<>();
     private BooleanProperty borderVisibility = new SimpleBooleanProperty(TRUE);
+
+    public void resetColourPickers() {
+        streetOverviewColour.setValue(BLUE);
+        saleOverviewNotStartedColour.setValue(RED);
+        saleOverviewBusyColour.setValue(ORANGE);
+        saleOverviewDoneColour.setValue(GREEN);
+        borderColour.setValue(BLACK);
+    }
 
     public Color getStreetOverviewColour() {
         return streetOverviewColour.get();

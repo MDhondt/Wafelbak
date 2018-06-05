@@ -1,5 +1,8 @@
 package be.scoutsronse.wafelbak.presenter;
 
+import be.scoutsronse.wafelbak.tech.event.ApplicationStarted;
+import be.scoutsronse.wafelbak.tech.event.eventbus.Subscribe;
+import be.scoutsronse.wafelbak.tech.util.FXUtils;
 import be.scoutsronse.wafelbak.view.SettingsView;
 import be.scoutsronse.wafelbak.view.component.AccordionPane;
 import be.scoutsronse.wafelbak.view.model.SettingsModel;
@@ -35,5 +38,10 @@ public class SettingsPresenter {
 
     public Color getStreetOverviewColour() {
         return model.getStreetOverviewColour();
+    }
+
+    @Subscribe
+    public void initializeColourPickers(ApplicationStarted event) {
+        FXUtils.executeOnFXThread(() -> model.resetColourPickers());
     }
 }

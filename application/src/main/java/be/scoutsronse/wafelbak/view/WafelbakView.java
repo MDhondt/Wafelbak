@@ -56,6 +56,7 @@ public class WafelbakView {
             }
         });
         leftTools.setMinWidth(250);
+        leftTools.setMaxWidth(250);
 
         return leftTools;
     }
