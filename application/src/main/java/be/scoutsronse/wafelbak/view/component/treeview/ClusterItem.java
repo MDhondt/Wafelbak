@@ -1,6 +1,8 @@
 package be.scoutsronse.wafelbak.view.component.treeview;
 
-abstract class ClusterItem {
+import java.io.Serializable;
+
+abstract class ClusterItem implements Serializable {
 
     private String name;
 

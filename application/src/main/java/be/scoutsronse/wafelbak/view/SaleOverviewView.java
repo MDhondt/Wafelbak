@@ -17,8 +17,9 @@ import java.util.Optional;
 
 import static be.scoutsronse.wafelbak.domain.ClusterStatus.NOT_STARTED;
 import static be.scoutsronse.wafelbak.i18n.MessageTag.*;
-import static be.scoutsronse.wafelbak.tech.util.FXUtils.executeOnFXThread;
 import static java.time.LocalDate.now;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
@@ -95,35 +96,58 @@ public class SaleOverviewView extends AbstractView {
     }
 
     private void populateOpenSale() {
-        executeOnFXThread(() -> {
-            openedSale = new VBox();
-            openedSale.setAlignment(TOP_CENTER);
+        openedSale = new VBox();
+        openedSale.setAlignment(TOP_CENTER);
 
-            HBox notStarted = new HBox();
-            notStarted.setAlignment(CENTER);
+        HBox notStarted = new HBox();
+        notStarted.setAlignment(CENTER);
 
-            StackPane stackPane = new StackPane();
-            Rectangle rectangle = new Rectangle(200, 250, Paint.valueOf("#235478"));
-            rectangle.setArcHeight(10);
-            rectangle.setArcWidth(10);
-            DropShadow shadow = new DropShadow(5, 1, 1, BLACK);
-            rectangle.setEffect(shadow);
+        StackPane notStartedStackPane = new StackPane();
+        Rectangle notStartedRectangle = new Rectangle(200, 250, Paint.valueOf("#235478"));
+        notStartedRectangle.setArcHeight(10);
+        notStartedRectangle.setArcWidth(10);
+        DropShadow shadow = new DropShadow(5, 1, 1, BLACK);
+        notStartedRectangle.setEffect(shadow);
 
-            SearchableClusterTreeView notStartedTree = new SearchableClusterTreeView(streets -> System.out.println("TODO"));
-            notStartedTree.setContentOpacity(0.8);
-            notStartedTree.setContent(presenter.getClustersFor(NOT_STARTED));
-            notStartedTree.minHeightProperty().bind(rectangle.heightProperty().subtract(6));
-            notStartedTree.prefHeightProperty().bind(rectangle.heightProperty().subtract(6));
-            notStartedTree.maxHeightProperty().bind(rectangle.heightProperty().subtract(6));
-            notStartedTree.minWidthProperty().bind(rectangle.widthProperty().subtract(4));
-            notStartedTree.prefWidthProperty().bind(rectangle.widthProperty().subtract(4));
-            notStartedTree.maxWidthProperty().bind(rectangle.widthProperty().subtract(4));
+        SearchableClusterTreeView notStartedTree = new SearchableClusterTreeView(streets -> System.out.println("Selected 'notStarted' item"));
+        notStartedTree.setContentOpacity(0.8);
+        notStartedTree.setContent(presenter.getClustersFor(NOT_STARTED));
+        notStartedTree.setAllowedDragSources(emptyList());
+        notStartedTree.minHeightProperty().bind(notStartedRectangle.heightProperty().subtract(6));
+        notStartedTree.prefHeightProperty().bind(notStartedRectangle.heightProperty().subtract(6));
+        notStartedTree.maxHeightProperty().bind(notStartedRectangle.heightProperty().subtract(6));
+        notStartedTree.minWidthProperty().bind(notStartedRectangle.widthProperty().subtract(4));
+        notStartedTree.prefWidthProperty().bind(notStartedRectangle.widthProperty().subtract(4));
+        notStartedTree.maxWidthProperty().bind(notStartedRectangle.widthProperty().subtract(4));
 
-            stackPane.getChildren().addAll(rectangle, notStartedTree);
+        notStartedStackPane.getChildren().addAll(notStartedRectangle, notStartedTree);
+        notStarted.getChildren().add(notStartedStackPane);
 
-            notStarted.getChildren().add(stackPane);
-            openedSale.getChildren().add(notStarted);
-        });
+        HBox busyOrDone = new HBox();
+        busyOrDone.setAlignment(CENTER);
+
+        StackPane busyStackPane = new StackPane();
+        Rectangle busyRectangle = new Rectangle(200, 250, Paint.valueOf("#772f22"));
+        busyRectangle.setArcHeight(10);
+        busyRectangle.setArcWidth(10);
+//        DropShadow shadow = new DropShadow(5, 1, 1, BLACK);
+        busyRectangle.setEffect(shadow);
+
+        SearchableClusterTreeView busyTree = new SearchableClusterTreeView(streets -> System.out.println("Selected 'busy' item"));
+        busyTree.setContentOpacity(0.8);
+        busyTree.setContent(presenter.getClustersFor(NOT_STARTED)); // TODO change to NOT_STARTED to BUSY
+        busyTree.setAllowedDragSources(singletonList(notStartedTree));
+        busyTree.minHeightProperty().bind(busyRectangle.heightProperty().subtract(6));
+        busyTree.prefHeightProperty().bind(busyRectangle.heightProperty().subtract(6));
+        busyTree.maxHeightProperty().bind(busyRectangle.heightProperty().subtract(6));
+        busyTree.minWidthProperty().bind(busyRectangle.widthProperty().subtract(4));
+        busyTree.prefWidthProperty().bind(busyRectangle.widthProperty().subtract(4));
+        busyTree.maxWidthProperty().bind(busyRectangle.widthProperty().subtract(4));
+
+        busyStackPane.getChildren().addAll(busyRectangle, busyTree);
+
+        busyOrDone.getChildren().add(busyStackPane);
+        openedSale.getChildren().addAll(notStarted, busyOrDone);
     }
 
     public TitledPane getPane() {

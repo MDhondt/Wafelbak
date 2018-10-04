@@ -3,6 +3,7 @@ package be.scoutsronse.wafelbak.domain.dto;
 import be.scoutsronse.wafelbak.domain.entity.Cluster;
 import be.scoutsronse.wafelbak.domain.id.ClusterId;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
@@ -11,7 +12,7 @@ import static java.util.Objects.hash;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 
-public class ClusterDto implements Comparable {
+public class ClusterDto implements Comparable, Serializable {
 
     public final ClusterId id;
     public final String name;

@@ -21,10 +21,10 @@ import static org.controlsfx.control.textfield.TextFields.createClearableTextFie
 
 public class SearchableClusterTreeView extends VBox {
 
-    private TextField searchBox;
-    private TreeView<ClusterItem> treeView;
-    private Collection<ClusterDto> allClusters;
-    private TreeSet<ClusterDto> visibleClusters = new TreeSet<>(comparing(cluster -> cluster.name));
+    TextField searchBox;
+    TreeView<ClusterItem> treeView;
+    Collection<ClusterDto> allClusters;
+    TreeSet<ClusterDto> visibleClusters = new TreeSet<>(comparing(cluster -> cluster.name));
 
     public SearchableClusterTreeView(Consumer<Collection<StreetId>> selectionConsumer) {
         super(5);
@@ -79,6 +79,10 @@ public class SearchableClusterTreeView extends VBox {
         this.treeView.setOpacity(opacity);
     }
 
+    public void setAllowedDragSources(Collection<SearchableClusterTreeView> allowedDragSources) {
+        treeView.setCellFactory(new DragDropCellFactory(this, allowedDragSources));
+    }
+
     private void setVisibleClusters(String expansionName) {
         treeView.getRoot().getChildren().clear();
         visibleClusters.forEach(visibleCluster -> {
@@ -98,7 +102,7 @@ public class SearchableClusterTreeView extends VBox {
         }
     }
 
-    private void search(String searchInput) {
+    void search(String searchInput) {
         visibleClusters.clear();
         for (ClusterDto cluster : allClusters) {
             if (cluster.name.toLowerCase().contains(searchInput.toLowerCase())) {

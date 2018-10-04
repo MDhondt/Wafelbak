@@ -5,13 +5,14 @@ import be.scoutsronse.wafelbak.domain.id.ClusterId;
 import be.scoutsronse.wafelbak.domain.id.StreetId;
 import be.scoutsronse.wafelbak.domain.id.WayId;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
 
 import static java.util.Collections.unmodifiableCollection;
 import static java.util.Objects.hash;
 
-public class StreetDto {
+public class StreetDto implements Serializable {
 
     public final StreetId id;
     public final String name;
