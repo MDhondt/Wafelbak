@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.context.MessageSource;
 
 import java.util.List;
@@ -103,7 +104,8 @@ public class SaleOverviewView extends AbstractView {
         notStarted.setAlignment(CENTER);
 
         StackPane notStartedStackPane = new StackPane();
-        Rectangle notStartedRectangle = new Rectangle(200, 250, Paint.valueOf("#235478"));
+        Rectangle notStartedRectangle = new Rectangle(155, 250);
+        notStartedRectangle.fillProperty().bind(presenter.getNotStartedColour());
         notStartedRectangle.setArcHeight(10);
         notStartedRectangle.setArcWidth(10);
         DropShadow shadow = new DropShadow(5, 1, 1, BLACK);
@@ -123,20 +125,19 @@ public class SaleOverviewView extends AbstractView {
         notStartedStackPane.getChildren().addAll(notStartedRectangle, notStartedTree);
         notStarted.getChildren().add(notStartedStackPane);
 
-        HBox busyOrDone = new HBox();
+        HBox busyOrDone = new HBox(10);
         busyOrDone.setAlignment(CENTER);
 
         StackPane busyStackPane = new StackPane();
-        Rectangle busyRectangle = new Rectangle(200, 250, Paint.valueOf("#772f22"));
+        Rectangle busyRectangle = new Rectangle(155, 250, Paint.valueOf("#772f22"));
         busyRectangle.setArcHeight(10);
         busyRectangle.setArcWidth(10);
-//        DropShadow shadow = new DropShadow(5, 1, 1, BLACK);
         busyRectangle.setEffect(shadow);
 
         SearchableClusterTreeView busyTree = new SearchableClusterTreeView(streets -> System.out.println("Selected 'busy' item"));
         busyTree.setContentOpacity(0.8);
         busyTree.setContent(presenter.getClustersFor(NOT_STARTED)); // TODO change to NOT_STARTED to BUSY
-        busyTree.setAllowedDragSources(singletonList(notStartedTree));
+        busyTree.setAllowedDragSources(singletonList(Triple.of(notStartedTree, x -> true, x -> {})));
         busyTree.minHeightProperty().bind(busyRectangle.heightProperty().subtract(6));
         busyTree.prefHeightProperty().bind(busyRectangle.heightProperty().subtract(6));
         busyTree.maxHeightProperty().bind(busyRectangle.heightProperty().subtract(6));
@@ -146,7 +147,7 @@ public class SaleOverviewView extends AbstractView {
 
         busyStackPane.getChildren().addAll(busyRectangle, busyTree);
 
-        busyOrDone.getChildren().add(busyStackPane);
+        busyOrDone.getChildren().addAll(notStartedStackPane, busyStackPane);
         openedSale.getChildren().addAll(notStarted, busyOrDone);
     }
 

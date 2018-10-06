@@ -38,6 +38,7 @@
         <mapjfx.version>1.14.0</mapjfx.version>
         <controlsfx.version>8.40.14</controlsfx.version>
         <jts.version>1.13</jts.version>
+        <commons.lang3.version>3.8.1</commons.lang3.version>
     </properties>
 
     <modules>
@@ -97,11 +98,6 @@
                 <version>${hibernate.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-java8</artifactId>
-                <version>${hibernate.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
                 <version>${h2.version}</version>
@@ -140,6 +136,11 @@
                 <groupId>com.vividsolutions</groupId>
                 <artifactId>jts</artifactId>
                 <version>${jts.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons.lang3.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

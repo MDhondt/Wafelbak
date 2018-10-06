@@ -2,11 +2,11 @@ package be.scoutsronse.wafelbak.presenter;
 
 import be.scoutsronse.wafelbak.domain.entity.Street;
 import be.scoutsronse.wafelbak.domain.id.StreetId;
+import be.scoutsronse.wafelbak.model.MapModel;
 import be.scoutsronse.wafelbak.osm.OSMService;
 import be.scoutsronse.wafelbak.repository.StreetRepository;
 import be.scoutsronse.wafelbak.service.WayService;
 import be.scoutsronse.wafelbak.view.MapView;
-import be.scoutsronse.wafelbak.view.model.MapModel;
 import com.sothawo.mapjfx.CoordinateLine;
 import javafx.scene.paint.Color;
 import org.springframework.stereotype.Component;

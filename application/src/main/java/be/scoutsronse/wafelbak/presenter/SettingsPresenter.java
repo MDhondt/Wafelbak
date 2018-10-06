@@ -1,11 +1,12 @@
 package be.scoutsronse.wafelbak.presenter;
 
+import be.scoutsronse.wafelbak.model.SettingsModel;
 import be.scoutsronse.wafelbak.tech.event.ApplicationStarted;
 import be.scoutsronse.wafelbak.tech.event.eventbus.Subscribe;
 import be.scoutsronse.wafelbak.tech.util.FXUtils;
 import be.scoutsronse.wafelbak.view.SettingsView;
 import be.scoutsronse.wafelbak.view.component.AccordionPane;
-import be.scoutsronse.wafelbak.view.model.SettingsModel;
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.paint.Color;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -38,6 +39,10 @@ public class SettingsPresenter {
 
     public Color getStreetOverviewColour() {
         return model.getStreetOverviewColour();
+    }
+
+    public ObjectProperty<Color> getNotStartedColourProperty() {
+        return model.saleOverviewNotStartedColourProperty();
     }
 
     @Subscribe

@@ -1,4 +1,4 @@
-package be.scoutsronse.wafelbak.view.model;
+package be.scoutsronse.wafelbak.model;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;

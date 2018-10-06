@@ -55,8 +55,8 @@ public class WafelbakView {
                 accordionPaneExpansionListeners.get(newValue).changed(observable, oldValue, newValue);
             }
         });
-        leftTools.setMinWidth(300);
-        leftTools.setMaxWidth(300);
+        leftTools.setMinWidth(350);
+        leftTools.setMaxWidth(350);
 
         return leftTools;
     }

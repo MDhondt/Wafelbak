@@ -9,6 +9,8 @@ import be.scoutsronse.wafelbak.repository.ClusterStateRepository;
 import be.scoutsronse.wafelbak.service.OpenedSaleService;
 import be.scoutsronse.wafelbak.view.SaleOverviewView;
 import be.scoutsronse.wafelbak.view.component.AccordionPane;
+import javafx.beans.property.ObjectProperty;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -35,6 +37,8 @@ public class SaleOverviewPresenter {
     private OpenedSaleService openedSaleService;
     @Inject
     private MessageSource messageSource;
+    @Inject
+    private SettingsPresenter settingsPresenter;
 
     @Value("${db.path}")
     private String dbPath;
@@ -96,5 +100,9 @@ public class SaleOverviewPresenter {
                                                           .anyMatch(state -> state.year().equals(openedSaleService.getCurrentYear()) && state.status().equals(status)))
                                 .map(ClusterDto::new)
                                 .collect(toList());
+    }
+
+    public ObjectProperty<Color> getNotStartedColour() {
+        return settingsPresenter.getNotStartedColourProperty();
     }
 }

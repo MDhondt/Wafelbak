@@ -1,4 +1,4 @@
-package be.scoutsronse.wafelbak.view.model;
+package be.scoutsronse.wafelbak.model;
 
 import be.scoutsronse.wafelbak.view.MapView;
 import com.sothawo.mapjfx.CoordinateLine;

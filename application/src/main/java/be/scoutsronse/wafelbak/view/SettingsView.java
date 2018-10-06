@@ -1,8 +1,8 @@
 package be.scoutsronse.wafelbak.view;
 
 import be.scoutsronse.wafelbak.i18n.MessageTag;
+import be.scoutsronse.wafelbak.model.SettingsModel;
 import be.scoutsronse.wafelbak.presenter.SettingsPresenter;
-import be.scoutsronse.wafelbak.view.model.SettingsModel;
 import com.sun.javafx.scene.control.skin.ColorPickerSkin;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;

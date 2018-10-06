@@ -6,11 +6,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.VBox;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.TreeSet;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -79,7 +81,7 @@ public class SearchableClusterTreeView extends VBox {
         this.treeView.setOpacity(opacity);
     }
 
-    public void setAllowedDragSources(Collection<SearchableClusterTreeView> allowedDragSources) {
+    public void setAllowedDragSources(Collection<Triple<SearchableClusterTreeView, Predicate<ClusterDto>, Consumer<ClusterDto>>> allowedDragSources) {
         treeView.setCellFactory(new DragDropCellFactory(this, allowedDragSources));
     }
 

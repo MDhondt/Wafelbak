@@ -8,8 +8,11 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.util.Callback;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.Collection;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import static java.lang.Integer.toHexString;
 import static java.util.stream.Collectors.toSet;
@@ -22,13 +25,13 @@ public class DragDropCellFactory implements Callback<TreeView<ClusterItem>, Tree
     private static final DataFormat JAVA_FORMAT = new DataFormat("application/x-java-serialized-object");
 
     private SearchableClusterTreeView source;
-    private Collection<SearchableClusterTreeView> allowedSources;
+    private Collection<Triple<SearchableClusterTreeView, Predicate<ClusterDto>, Consumer<ClusterDto>>> allowedSources;
     private Collection<String> allowedSourceIds;
 
-    public DragDropCellFactory(SearchableClusterTreeView source, Collection<SearchableClusterTreeView> allowedSources) {
+    public DragDropCellFactory(SearchableClusterTreeView source, Collection<Triple<SearchableClusterTreeView, Predicate<ClusterDto>, Consumer<ClusterDto>>> allowedSources) {
         this.source = source;
         this.allowedSources = allowedSources;
-        this.allowedSourceIds = allowedSources.stream().map(view -> view.treeView).map(TreeView::hashCode).map(Integer::toHexString).collect(toSet());
+        this.allowedSourceIds = allowedSources.stream().map(Triple::getLeft).map(view -> view.treeView).map(TreeView::hashCode).map(Integer::toHexString).collect(toSet());
     }
 
     @Override
@@ -71,18 +74,25 @@ public class DragDropCellFactory implements Callback<TreeView<ClusterItem>, Tree
             boolean success = false;
             if (event.getDragboard().hasContent(JAVA_FORMAT) && event.getGestureSource() != null && allowedSourceIds.contains(event.getDragboard().getString())) {
                 ClusterDto draggedCluster = (ClusterDto) db.getContent(JAVA_FORMAT);
+                Triple<SearchableClusterTreeView, Predicate<ClusterDto>, Consumer<ClusterDto>> allowedSource =
+                        allowedSources.stream().filter(triple -> event.getDragboard().getString().equals(toHexString(triple.getLeft().treeView.hashCode()))).findFirst().get();
 
-                SearchableClusterTreeView dragSource = allowedSources.stream().filter(source -> event.getDragboard().getString().equals(toHexString(source.treeView.hashCode()))).findFirst().get();
-                dragSource.setContent(dragSource.allClusters.stream().filter(cluster -> !cluster.id.equals(draggedCluster.id)).collect(toSet()));
-                dragSource.search(dragSource.searchBox.getText());
+                if (allowedSource.getMiddle().test(draggedCluster)) {
+                    SearchableClusterTreeView dragSource = allowedSource.getLeft();
+                    dragSource.setContent(dragSource.allClusters.stream().filter(cluster -> !cluster.id.equals(draggedCluster.id)).collect(toSet()));
+                    dragSource.search(dragSource.searchBox.getText());
 
-                source.setContent(concat(of(draggedCluster), source.allClusters.stream()).collect(toSet()));
-                source.search(source.searchBox.getText());
-                TreeItem<ClusterItem> newItem = source.treeView.getRoot().getChildren().stream().filter(item -> ((ClusterData) item.getValue()).getId().equals(draggedCluster.id)).findFirst().get();
-                source.treeView.getSelectionModel().select(newItem);
-                success = true;
+                    source.setContent(concat(of(draggedCluster), source.allClusters.stream()).collect(toSet()));
+                    source.search(source.searchBox.getText());
+                    TreeItem<ClusterItem> newItem = source.treeView.getRoot().getChildren().stream().filter(item -> ((ClusterData) item.getValue()).getId().equals(draggedCluster.id)).findFirst().get();
+                    source.treeView.getSelectionModel().select(newItem);
+
+                    allowedSource.getRight().accept(draggedCluster);
+
+                    success = true;
+                }
             }
-            event.setDropCompleted(true);
+            event.setDropCompleted(success);
             event.consume();
         });
 

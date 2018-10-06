@@ -1,6 +1,6 @@
 package be.scoutsronse.wafelbak.view;
 
-import be.scoutsronse.wafelbak.view.model.MapModel;
+import be.scoutsronse.wafelbak.model.MapModel;
 import com.sothawo.mapjfx.Coordinate;
 import com.sothawo.mapjfx.CoordinateLine;
 import com.sothawo.mapjfx.offline.OfflineCache;
