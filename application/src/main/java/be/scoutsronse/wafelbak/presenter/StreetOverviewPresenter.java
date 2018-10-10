@@ -15,7 +15,9 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import java.util.Collection;
 
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.tuple.Pair.of;
 
 @Component
 @DependsOn("clusterInitializer")
@@ -45,6 +47,6 @@ public class StreetOverviewPresenter {
 
     public void selectStreets(Collection<StreetId> streets) {
         Color colour = settingsPresenter.getStreetOverviewColour();
-        mapPresenter.selectStreets(streets, colour);
+        mapPresenter.selectStreets(singletonList(of(streets, colour)));
     }
 }

@@ -3,6 +3,7 @@ package be.scoutsronse.wafelbak.model;
 import be.scoutsronse.wafelbak.view.MapView;
 import com.sothawo.mapjfx.CoordinateLine;
 import javafx.scene.paint.Color;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,10 +27,10 @@ public class MapModel {
         this.view = view;
     }
 
-    public void setSelectedStreets(Collection<CoordinateLine> streets, Color color) {
+    public void setSelectedStreets(Collection<Pair<Collection<CoordinateLine>, Color>> streetGroups) {
         view.deselectStreets(selectedStreets);
         selectedStreets.clear();
-        view.selectStreets(streets, color);
-        selectedStreets.addAll(streets);
+        streetGroups.forEach(group -> view.selectStreets(group.getLeft(), group.getRight()));
+        streetGroups.forEach(group -> selectedStreets.addAll(group.getLeft()));
     }
 }

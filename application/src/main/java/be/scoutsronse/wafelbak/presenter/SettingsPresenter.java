@@ -45,6 +45,14 @@ public class SettingsPresenter {
         return model.saleOverviewNotStartedColourProperty();
     }
 
+    public ObjectProperty<Color> getSaleOverviewBusyColourProperty() {
+        return model.saleOverviewBusyColourProperty();
+    }
+
+    public ObjectProperty<Color> getSaleOverviewDoneColourProperty() {
+        return model.saleOverviewDoneColourProperty();
+    }
+
     @Subscribe
     public void initializeColourPickers(ApplicationStarted event) {
         FXUtils.executeOnFXThread(() -> model.setDefaultValues());

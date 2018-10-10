@@ -39,6 +39,20 @@ public class SearchableClusterTreeView extends VBox {
 
         treeView = new TreeView<>(new TreeItem<>());
         treeView.setShowRoot(false);
+        if (selectionConsumer != null) {
+            setSelectionConsumer(selectionConsumer);
+        }
+
+        getChildren().addAll(searchBox, treeView);
+        setAlignment(TOP_CENTER);
+        treeView.prefHeightProperty().bind(this.heightProperty());
+        treeView.prefWidthProperty().bind(this.widthProperty());
+        searchBox.minWidthProperty().bind(treeView.widthProperty());
+        searchBox.prefWidthProperty().bind(treeView.widthProperty());
+        searchBox.maxWidthProperty().bind(treeView.widthProperty());
+    }
+
+    public void setSelectionConsumer(Consumer<Collection<StreetId>> selectionConsumer) {
         treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 ClusterItem selectedItem = newValue.getValue();
@@ -55,14 +69,6 @@ public class SearchableClusterTreeView extends VBox {
                 selectionConsumer.accept(emptyList());
             }
         });
-
-        getChildren().addAll(searchBox, treeView);
-        setAlignment(TOP_CENTER);
-        treeView.prefHeightProperty().bind(this.heightProperty());
-        treeView.prefWidthProperty().bind(this.widthProperty());
-        searchBox.minWidthProperty().bind(treeView.widthProperty());
-        searchBox.prefWidthProperty().bind(treeView.widthProperty());
-        searchBox.maxWidthProperty().bind(treeView.widthProperty());
     }
 
     public void setContent(Collection<ClusterDto> clusters) {
