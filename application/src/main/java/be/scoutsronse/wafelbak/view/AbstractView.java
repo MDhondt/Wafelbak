@@ -10,7 +10,7 @@ import static java.util.Optional.ofNullable;
 abstract class AbstractView {
 
     private MessageSource messageSource;
-    public static final Locale locale = new Locale("nl", "BE");
+    private static final Locale locale = new Locale("nl", "BE");
 
     AbstractView() {}
 
@@ -18,7 +18,7 @@ abstract class AbstractView {
         this.messageSource = messageSource;
     }
 
-    public String message(MessageTag property, Object... args) {
+    String message(MessageTag property, Object... args) {
         return ofNullable(messageSource).map(source -> source.getMessage(property.name(), args, locale))
                                         .orElse("No message source found");
     }

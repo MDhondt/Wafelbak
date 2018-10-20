@@ -1,6 +1,7 @@
 package be.scoutsronse.wafelbak.view.component.treeview;
 
 import be.scoutsronse.wafelbak.domain.dto.ClusterDto;
+import be.scoutsronse.wafelbak.domain.id.ClusterId;
 import be.scoutsronse.wafelbak.domain.id.StreetId;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
@@ -120,5 +121,13 @@ public class SearchableClusterTreeView extends VBox {
             }
         }
         setVisibleClusters(searchInput);
+    }
+
+    public ClusterId getSelectedClusterId() {
+        ClusterItem clusterItem = treeView.getSelectionModel().getSelectedItem().getValue();
+        if (clusterItem instanceof ClusterData) {
+            return ((ClusterData) clusterItem).getId();
+        }
+        return null;
     }
 }

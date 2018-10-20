@@ -1,6 +1,9 @@
 package be.scoutsronse.wafelbak.view;
 
+import be.scoutsronse.wafelbak.domain.dto.dialog.StartSale;
+import be.scoutsronse.wafelbak.domain.id.ClusterId;
 import be.scoutsronse.wafelbak.presenter.SaleOverviewPresenter;
+import be.scoutsronse.wafelbak.view.component.dialog.StartSaleDialog;
 import be.scoutsronse.wafelbak.view.component.treeview.SearchableClusterTreeView;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
@@ -208,7 +211,7 @@ public class SaleOverviewView extends AbstractView {
         doneTree.setSelectionConsumer(combine(s -> busyTree.clearSelection(), s -> partlyDoneTree.clearSelection(), s -> notStartedTree.clearSelection(), presenter::selectDoneStreets));
 
         notStartedTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> true, x -> {})));
-        busyTree.setAllowedDragSources(Arrays.asList(Triple.of(notStartedTree, x -> true, x -> {}), Triple.of(partlyDoneTree, x -> true, x -> {}), Triple.of(doneTree, x -> true, x -> {})));
+        busyTree.setAllowedDragSources(Arrays.asList(Triple.of(notStartedTree, x -> startSaleDialog(notStartedTree.getSelectedClusterId()), x -> {}), Triple.of(partlyDoneTree, x -> true, x -> {}), Triple.of(doneTree, x -> true, x -> {})));
         partlyDoneTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> true, x -> {})));
         doneTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> true, x -> {})));
 
@@ -233,5 +236,14 @@ public class SaleOverviewView extends AbstractView {
         return buttonType.map(ButtonType::getButtonData)
                          .orElse(OTHER)
                          .equals(ButtonBar.ButtonData.YES);
+    }
+
+    private boolean startSaleDialog(ClusterId selectedClusterId) {
+        StartSaleDialog dialog = new StartSaleDialog(this::message, presenter.getClusterFor(selectedClusterId));
+        dialog.initModality(WINDOW_MODAL);
+        dialog.initOwner(mainStage);
+        Optional<StartSale> startSale = dialog.showAndWait();
+
+        return startSale.isPresent();
     }
 }

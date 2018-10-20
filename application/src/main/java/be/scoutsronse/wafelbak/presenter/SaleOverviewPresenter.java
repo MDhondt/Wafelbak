@@ -5,6 +5,7 @@ import be.scoutsronse.wafelbak.domain.dto.ClusterDto;
 import be.scoutsronse.wafelbak.domain.entity.Cluster;
 import be.scoutsronse.wafelbak.domain.entity.ClusterState;
 import be.scoutsronse.wafelbak.domain.entity.Street;
+import be.scoutsronse.wafelbak.domain.id.ClusterId;
 import be.scoutsronse.wafelbak.domain.id.StreetId;
 import be.scoutsronse.wafelbak.repository.ClusterRepository;
 import be.scoutsronse.wafelbak.repository.ClusterStateRepository;
@@ -146,5 +147,9 @@ public class SaleOverviewPresenter {
         Pair<List<StreetId>, Color> notDone = Pair.of(cluster.streets().stream().map(Street::id).filter(not(done.getLeft()::contains)).collect(toList()), getNotStartedColour().get());
 
         mapPresenter.selectStreets(asList(done, notDone));
+    }
+
+    public Cluster getClusterFor(ClusterId selectedClusterId) {
+        return clusterRepository.findById(selectedClusterId.value()).get();
     }
 }
