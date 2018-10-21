@@ -88,8 +88,8 @@ public class SearchableClusterTreeView extends VBox {
         this.treeView.setOpacity(opacity);
     }
 
-    public void setAllowedDragSources(Collection<Triple<SearchableClusterTreeView, Predicate<ClusterDto>, Consumer<ClusterDto>>> allowedDragSources) {
-        treeView.setCellFactory(new DragDropCellFactory(this, allowedDragSources));
+    public void setAllowedDragSources(Collection<Triple<SearchableClusterTreeView, Predicate<ClusterDto>, Consumer<ClusterDto>>> allowedDragSources, Consumer<ClusterId> doubleClickConsumer) {
+        treeView.setCellFactory(new DragDropCellFactory(this, allowedDragSources, doubleClickConsumer));
     }
 
     private void setVisibleClusters(String expansionName) {

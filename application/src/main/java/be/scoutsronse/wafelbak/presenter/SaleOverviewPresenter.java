@@ -2,13 +2,16 @@ package be.scoutsronse.wafelbak.presenter;
 
 import be.scoutsronse.wafelbak.domain.ClusterStatus;
 import be.scoutsronse.wafelbak.domain.dto.ClusterDto;
+import be.scoutsronse.wafelbak.domain.dto.dialog.StartSale;
 import be.scoutsronse.wafelbak.domain.entity.Cluster;
 import be.scoutsronse.wafelbak.domain.entity.ClusterState;
+import be.scoutsronse.wafelbak.domain.entity.Sale;
 import be.scoutsronse.wafelbak.domain.entity.Street;
 import be.scoutsronse.wafelbak.domain.id.ClusterId;
 import be.scoutsronse.wafelbak.domain.id.StreetId;
 import be.scoutsronse.wafelbak.repository.ClusterRepository;
 import be.scoutsronse.wafelbak.repository.ClusterStateRepository;
+import be.scoutsronse.wafelbak.repository.SaleRepository;
 import be.scoutsronse.wafelbak.service.OpenedSaleService;
 import be.scoutsronse.wafelbak.view.SaleOverviewView;
 import be.scoutsronse.wafelbak.view.component.AccordionPane;
@@ -25,12 +28,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import static be.scoutsronse.wafelbak.domain.ClusterStatus.BUSY;
 import static be.scoutsronse.wafelbak.tech.util.Collectors.toReversedList;
 import static be.scoutsronse.wafelbak.tech.util.PredicateUtils.not;
 import static java.lang.System.getProperty;
 import static java.time.LocalDate.now;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.tuple.Pair.of;
 
@@ -41,6 +46,8 @@ public class SaleOverviewPresenter {
     private ClusterRepository clusterRepository;
     @Inject
     private ClusterStateRepository clusterStateRepository;
+    @Inject
+    private SaleRepository saleRepository;
     @Inject
     private OpenedSaleService openedSaleService;
     @Inject
@@ -151,5 +158,54 @@ public class SaleOverviewPresenter {
 
     public Cluster getClusterFor(ClusterId selectedClusterId) {
         return clusterRepository.findById(selectedClusterId.value()).get();
+    }
+
+    public void startSale(ClusterId clusterId, StartSale startSale) {
+        Cluster cluster = clusterRepository.findById(clusterId.value()).get();
+        Collection<Street> streets = cluster.streets();
+        ClusterState clusterState = cluster.states().stream()
+                                           .filter(state -> state.year().equals(openedSaleService.getCurrentYear()))
+                                           .findFirst().get();
+        List<Street> streetsToBeDone = streets.stream()
+                                              .filter(street -> clusterState.streetsDone().stream()
+                                                                            .map(Street::id)
+                                                                            .noneMatch(street.id()::equals))
+                                              .collect(toList());
+        clusterState.setStatus(BUSY);
+        Sale sale = new Sale(startSale.getAmount(),
+                             startSale.getSalesMan(),
+                             startSale.getContact(),
+                             startSale.getStartTime(),
+                             streetsToBeDone,
+                             clusterState,
+                             startSale.getSalesTeam());
+        clusterState.addSale(sale);
+
+        saleRepository.saveAndFlush(sale);
+        clusterStateRepository.saveAndFlush(clusterState);
+    }
+
+    public void updateSale(ClusterId clusterId, StartSale updatedSale) {
+        Cluster cluster = clusterRepository.findById(clusterId.value()).get();
+        ClusterState clusterState = cluster.states().stream()
+                                           .filter(state -> state.year().equals(openedSaleService.getCurrentYear()))
+                                           .findFirst().get();
+        Sale currentSale = clusterState.sales().stream().sorted(comparing(Sale::start).reversed()).findFirst().get();
+        currentSale.setAmount(updatedSale.getAmount());
+        currentSale.setSalesMan(updatedSale.getSalesMan());
+        currentSale.setContact(updatedSale.getContact());
+        currentSale.setStart(updatedSale.getStartTime());
+        currentSale.setSalesTeam(updatedSale.getSalesTeam());
+
+        saleRepository.saveAndFlush(currentSale);
+    }
+
+    public StartSale getBusySaleFor(ClusterId clusterId) {
+        Cluster cluster = clusterRepository.findById(clusterId.value()).get();
+        ClusterState clusterState = cluster.states().stream()
+                                           .filter(state -> state.year().equals(openedSaleService.getCurrentYear()))
+                                           .findFirst().get();
+        Sale sale = clusterState.sales().stream().sorted(comparing(Sale::start)).findFirst().get();
+        return new StartSale(sale.amount(), sale.salesMan(), sale.contact(), sale.salesTeam(), sale.start().toLocalTime());
     }
 }

@@ -32,6 +32,16 @@ public class Sale extends AbstractEntity<SaleId> {
 
     private Sale() {}
 
+    public Sale(Integer amount, String salesMan, String contact, LocalDateTime start, Collection<Street> streets, ClusterState state, Collection<String> salesTeam) {
+        this.amount = amount.shortValue();
+        this.salesMan = salesMan;
+        this.contact = contact;
+        this.start = start;
+        this.streets = streets;
+        this.clusterState = state;
+        this.salesTeam = salesTeam;
+    }
+
     @Override
     public SaleId id() {
         return aSaleId(id);
@@ -71,6 +81,42 @@ public class Sale extends AbstractEntity<SaleId> {
 
     public Collection<Street> streets() {
         return new HashSet<>(streets);
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount.shortValue();
+    }
+
+    public void setSalesMan(String salesMan) {
+        this.salesMan = salesMan;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public void setStart(LocalDateTime start) {
+        this.start = start;
+    }
+
+    public void setEnd(LocalDateTime end) {
+        this.end = end;
+    }
+
+    public void setMoney(Float money) {
+        this.money = money;
+    }
+
+    public void setStreets(Collection<Street> streets) {
+        this.streets = streets;
+    }
+
+    public void setClusterState(ClusterState clusterState) {
+        this.clusterState = clusterState;
+    }
+
+    public void setSalesTeam(Collection<String> salesTeam) {
+        this.salesTeam = salesTeam;
     }
 
     @Override

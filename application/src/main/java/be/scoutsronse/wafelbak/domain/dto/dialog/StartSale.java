@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
+import java.util.Collection;
 import java.util.Objects;
 
 public class StartSale implements Serializable {
@@ -12,10 +12,10 @@ public class StartSale implements Serializable {
     private final Integer amount;
     private final String salesMan;
     private final String contact;
-    private final List<String> salesTeam;
+    private final Collection<String> salesTeam;
     private final LocalTime startTime;
 
-    public StartSale(Integer amount, String salesMan, String contact, List<String> salesTeam, LocalTime startTime) {
+    public StartSale(Integer amount, String salesMan, String contact, Collection<String> salesTeam, LocalTime startTime) {
         this.amount = amount;
         this.salesMan = salesMan;
         this.contact = contact;
@@ -35,7 +35,7 @@ public class StartSale implements Serializable {
         return contact;
     }
 
-    public List<String> getSalesTeam() {
+    public Collection<String> getSalesTeam() {
         return salesTeam;
     }
 

@@ -64,6 +64,14 @@ public class ClusterState extends AbstractEntity<ClusterStateId> {
         return year.intValue();
     }
 
+    public void setStatus(ClusterStatus status) {
+        this.status = status;
+    }
+
+    public void addSale(Sale sale) {
+        sales.add(sale);
+    }
+
     @Override
     public String toString() {
         return "ClusterState{" +

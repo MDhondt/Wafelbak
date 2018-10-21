@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.context.MessageSource;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +22,7 @@ import static be.scoutsronse.wafelbak.domain.ClusterStatus.*;
 import static be.scoutsronse.wafelbak.i18n.MessageTag.*;
 import static be.scoutsronse.wafelbak.tech.util.ConsumerUtils.combine;
 import static java.time.LocalDate.now;
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.TOP_CENTER;
@@ -210,10 +210,10 @@ public class SaleOverviewView extends AbstractView {
         partlyDoneTree.setSelectionConsumer(combine(s -> busyTree.clearSelection(), s -> notStartedTree.clearSelection(), s -> doneTree.clearSelection(), presenter::selectPartlyDoneStreets));
         doneTree.setSelectionConsumer(combine(s -> busyTree.clearSelection(), s -> partlyDoneTree.clearSelection(), s -> notStartedTree.clearSelection(), presenter::selectDoneStreets));
 
-        notStartedTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> true, x -> {})));
-        busyTree.setAllowedDragSources(Arrays.asList(Triple.of(notStartedTree, x -> startSaleDialog(notStartedTree.getSelectedClusterId()), x -> {}), Triple.of(partlyDoneTree, x -> true, x -> {}), Triple.of(doneTree, x -> true, x -> {})));
-        partlyDoneTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> true, x -> {})));
-        doneTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> true, x -> {})));
+        notStartedTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> true, x -> {})), null);
+        busyTree.setAllowedDragSources(asList(Triple.of(notStartedTree, x -> startSaleDialog(notStartedTree.getSelectedClusterId()), x -> {}), Triple.of(partlyDoneTree, x -> true, x -> {}), Triple.of(doneTree, x -> true, x -> {})), this::updateBusySaleDialog);
+        partlyDoneTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> true, x -> {})), null);
+        doneTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> true, x -> {})), null);
 
         openedSale.getChildren().addAll(notStarted, busy, done);
     }
@@ -244,6 +244,23 @@ public class SaleOverviewView extends AbstractView {
         dialog.initOwner(mainStage);
         Optional<StartSale> startSale = dialog.showAndWait();
 
-        return startSale.isPresent();
+        if (startSale.isPresent()) {
+            presenter.startSale(selectedClusterId, startSale.get());
+            return true;
+        }
+        return false;
+    }
+
+    private boolean updateBusySaleDialog(ClusterId clusterId) {
+        StartSaleDialog dialog = new StartSaleDialog(this::message, presenter.getClusterFor(clusterId), presenter.getBusySaleFor(clusterId));
+        dialog.initModality(WINDOW_MODAL);
+        dialog.initOwner(mainStage);
+        Optional<StartSale> updateSale = dialog.showAndWait();
+
+        if (updateSale.isPresent()) {
+            presenter.updateSale(clusterId, updateSale.get());
+            return true;
+        }
+        return false;
     }
 }

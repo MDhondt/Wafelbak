@@ -23,6 +23,7 @@ import java.util.function.UnaryOperator;
 
 import static be.scoutsronse.wafelbak.i18n.MessageTag.*;
 import static java.lang.Double.MAX_VALUE;
+import static java.lang.String.join;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.Arrays.asList;
 import static java.util.Comparator.comparing;
@@ -75,9 +76,9 @@ public class StartSaleDialog extends Dialog<StartSale> {
         teamField.prefWidthProperty().bind(salesManField.widthProperty());
         teamField.prefHeightProperty().bind(salesManField.heightProperty().multiply(3));
 
-        Integer allTimeAmount = cluster.states().stream().map(ClusterState::sales).flatMap(Collection::stream).mapToInt(Sale::amount).sum();
-        Integer lastAmount = cluster.states().stream().sorted(comparing(ClusterState::year).reversed()).findFirst().map(ClusterState::sales).map(Collection::stream).map(str -> str.mapToInt(Sale::amount).sum()).orElse(0);
-        Integer numberOfSales = (int) cluster.states().stream().filter(state -> state.sales().stream().mapToInt(Sale::amount).sum() > 0).count();
+        Integer allTimeAmount = cluster.states().stream().sorted(comparing(ClusterState::year).reversed()).skip(1).map(ClusterState::sales).flatMap(Collection::stream).mapToInt(Sale::amount).sum();
+        Integer lastAmount = cluster.states().stream().sorted(comparing(ClusterState::year).reversed()).skip(1).findFirst().map(ClusterState::sales).map(Collection::stream).map(str -> str.mapToInt(Sale::amount).sum()).orElse(0);
+        Integer numberOfSales = (int) cluster.states().stream().sorted(comparing(ClusterState::year).reversed()).skip(1).filter(state -> state.sales().stream().mapToInt(Sale::amount).sum() > 0).count();
         Integer averageAmount = numberOfSales != 0 ? allTimeAmount / numberOfSales : 0;
         salesManLabel = createContentLabel(messageSource.apply(SALESMAN, new Object[0]));
         contactLabel = createContentLabel(messageSource.apply(CONTACT, new Object[0]));
@@ -124,6 +125,24 @@ public class StartSaleDialog extends Dialog<StartSale> {
         });
 
         runLater(() -> validationListener.changed(null, null, null));
+    }
+
+    public StartSaleDialog(BiFunction<MessageTag, Object[], String> messageSource, Cluster cluster, StartSale startSale) {
+        this(messageSource, cluster);
+        salesManField.setText(startSale.getSalesMan());
+        contactField.setText(startSale.getContact());
+        teamField.setText(join("\n", startSale.getSalesTeam()));
+        amountField.getValueFactory().setValue(startSale.getAmount());
+        startTimeField.setText(startSale.getStartTime().toLocalTime().format(ofPattern("HH:mm")));
+
+        ButtonType updateButton = new ButtonType(messageSource.apply(SAVE, new Object[0]), OK_DONE);
+        ButtonType cancelButton = new ButtonType(messageSource.apply(CANCEL, new Object[0]), CANCEL_CLOSE);
+        ChangeListener validationListener = getListener(getDialogPane(), updateButton);
+        salesManField.textProperty().addListener(validationListener);
+        amountField.valueProperty().addListener(validationListener);
+        startTimeField.textProperty().addListener(validationListener);
+        getDialogPane().getButtonTypes().clear();
+        getDialogPane().getButtonTypes().addAll(updateButton, cancelButton);
     }
 
     private ChangeListener getListener(DialogPane dialogPane, ButtonType startButton) {

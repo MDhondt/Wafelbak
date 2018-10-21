@@ -1,6 +1,7 @@
 package be.scoutsronse.wafelbak.view.component.treeview;
 
 import be.scoutsronse.wafelbak.domain.dto.ClusterDto;
+import be.scoutsronse.wafelbak.domain.id.ClusterId;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -27,11 +28,13 @@ public class DragDropCellFactory implements Callback<TreeView<ClusterItem>, Tree
     private SearchableClusterTreeView source;
     private Collection<Triple<SearchableClusterTreeView, Predicate<ClusterDto>, Consumer<ClusterDto>>> allowedSources;
     private Collection<String> allowedSourceIds;
+    private Consumer<ClusterId> doubleClickConsumer;
 
-    public DragDropCellFactory(SearchableClusterTreeView source, Collection<Triple<SearchableClusterTreeView, Predicate<ClusterDto>, Consumer<ClusterDto>>> allowedSources) {
+    public DragDropCellFactory(SearchableClusterTreeView source, Collection<Triple<SearchableClusterTreeView, Predicate<ClusterDto>, Consumer<ClusterDto>>> allowedSources, Consumer<ClusterId> doubleClickConsumer) {
         this.source = source;
         this.allowedSources = allowedSources;
         this.allowedSourceIds = allowedSources.stream().map(Triple::getLeft).map(view -> view.treeView).map(TreeView::hashCode).map(Integer::toHexString).collect(toSet());
+        this.doubleClickConsumer = doubleClickConsumer;
     }
 
     @Override
@@ -94,6 +97,16 @@ public class DragDropCellFactory implements Callback<TreeView<ClusterItem>, Tree
             }
             event.setDropCompleted(success);
             event.consume();
+        });
+
+        cell.setOnMouseClicked(event -> {
+            if (doubleClickConsumer != null && event.getClickCount() == 2 && !cell.isEmpty()) {
+                ClusterItem item = cell.getItem();
+                if (!(item instanceof ClusterData))
+                    return;
+                ClusterId clusterId = ((ClusterData) item).getId();
+                doubleClickConsumer.accept(clusterId);
+            }
         });
 
         return cell;
