@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static be.scoutsronse.wafelbak.domain.ClusterStatus.BUSY;
+import static be.scoutsronse.wafelbak.domain.ClusterStatus.NOT_STARTED;
 import static be.scoutsronse.wafelbak.tech.util.Collectors.toReversedList;
 import static be.scoutsronse.wafelbak.tech.util.PredicateUtils.not;
 import static java.lang.System.getProperty;
@@ -207,5 +208,27 @@ public class SaleOverviewPresenter {
                                            .findFirst().get();
         Sale sale = clusterState.sales().stream().sorted(comparing(Sale::start)).findFirst().get();
         return new StartSale(sale.amount(), sale.salesMan(), sale.contact(), sale.salesTeam(), sale.start().toLocalTime());
+    }
+
+    public void undoStart(ClusterId id) {
+        try {
+            Cluster cluster = clusterRepository.findById(id.value()).get();
+            Sale sale = null;
+            try {
+                ClusterState clusterState = cluster.states().stream()
+                                                   .filter(state -> state.year().equals(openedSaleService.getCurrentYear()))
+                                                   .findFirst().get();
+                try {
+                    sale = clusterState.sales().stream().sorted(comparing(Sale::start)).findFirst().get();
+                    clusterState.removeSale(sale);
+                } catch (Exception e) {
+                }
+                clusterState.setStatus(NOT_STARTED);
+                clusterStateRepository.saveAndFlush(clusterState);
+            } catch (Exception e) {
+            }
+            saleRepository.delete(sale);
+            saleRepository.flush();
+        } catch (Exception e) {}
     }
 }

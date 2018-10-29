@@ -115,7 +115,7 @@ public class StartSaleDialog extends Dialog<StartSale> {
         setResultConverter(dialogButton -> {
             ButtonBar.ButtonData data = dialogButton == null ? null : dialogButton.getButtonData();
             if (data == OK_DONE) {
-                return new StartSale(amountField.getValue(),
+                return new StartSale(Integer.parseInt(amountField.getEditor().getText()),
                                      salesManField.getText(),
                                      contactField.getText(),
                                      asList(teamField.getText().split("\n")),
@@ -147,15 +147,17 @@ public class StartSaleDialog extends Dialog<StartSale> {
 
     private ChangeListener getListener(DialogPane dialogPane, ButtonType startButton) {
         return (observable, oldValue, newValue) -> {
-            if (!isBlank(salesManField.getText()) && amountField.getValue() > 0) {
-                try {
-                    LocalTime.parse(startTimeField.getText(), ofPattern("HH:mm"));
-                    dialogPane.lookupButton(startButton).setDisable(false);
-                    return;
-                } catch (DateTimeParseException dtpe) {
+            if (dialogPane.lookupButton(startButton) != null) {
+                if (!isBlank(salesManField.getText()) && amountField.getValue() > 0) {
+                    try {
+                        LocalTime.parse(startTimeField.getText(), ofPattern("HH:mm"));
+                        dialogPane.lookupButton(startButton).setDisable(false);
+                        return;
+                    } catch (DateTimeParseException dtpe) {
+                    }
                 }
+                dialogPane.lookupButton(startButton).setDisable(true);
             }
-            dialogPane.lookupButton(startButton).setDisable(true);
         };
     }
 

@@ -89,6 +89,7 @@ public class DragDropCellFactory implements Callback<TreeView<ClusterItem>, Tree
                     source.search(source.searchBox.getText());
                     TreeItem<ClusterItem> newItem = source.treeView.getRoot().getChildren().stream().filter(item -> ((ClusterData) item.getValue()).getId().equals(draggedCluster.id)).findFirst().get();
                     source.treeView.getSelectionModel().select(newItem);
+                    source.treeView.getSelectionModel().select(newItem);
 
                     allowedSource.getRight().accept(draggedCluster);
 

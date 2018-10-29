@@ -40,5 +40,6 @@ public enum MessageTag {
     AMOUNT_INFO,
     START_TIME,
     START_SALE_TITLE,
-    SAVE
+    SAVE,
+    REMOVE_BUSY
 }

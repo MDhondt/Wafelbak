@@ -69,7 +69,15 @@ public class ClusterState extends AbstractEntity<ClusterStateId> {
     }
 
     public void addSale(Sale sale) {
-        sales.add(sale);
+        Collection<Sale> s = sales();
+        s.add(sale);
+        this.sales = new HashSet<>(s);
+    }
+
+    public void removeSale(Sale sale) {
+        Collection<Sale> s = sales();
+        s.remove(sale);
+        this.sales = new HashSet<>(s);
     }
 
     @Override

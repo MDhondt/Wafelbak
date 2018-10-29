@@ -1,5 +1,6 @@
 package be.scoutsronse.wafelbak.view;
 
+import be.scoutsronse.wafelbak.domain.dto.ClusterDto;
 import be.scoutsronse.wafelbak.domain.dto.dialog.StartSale;
 import be.scoutsronse.wafelbak.domain.id.ClusterId;
 import be.scoutsronse.wafelbak.presenter.SaleOverviewPresenter;
@@ -210,10 +211,16 @@ public class SaleOverviewView extends AbstractView {
         partlyDoneTree.setSelectionConsumer(combine(s -> busyTree.clearSelection(), s -> notStartedTree.clearSelection(), s -> doneTree.clearSelection(), presenter::selectPartlyDoneStreets));
         doneTree.setSelectionConsumer(combine(s -> busyTree.clearSelection(), s -> partlyDoneTree.clearSelection(), s -> notStartedTree.clearSelection(), presenter::selectDoneStreets));
 
-        notStartedTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> true, x -> {})), null);
-        busyTree.setAllowedDragSources(asList(Triple.of(notStartedTree, x -> startSaleDialog(notStartedTree.getSelectedClusterId()), x -> {}), Triple.of(partlyDoneTree, x -> true, x -> {}), Triple.of(doneTree, x -> true, x -> {})), this::updateBusySaleDialog);
-        partlyDoneTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> true, x -> {})), null);
-        doneTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> true, x -> {})), null);
+        notStartedTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> undoStart(), this::undoStart)),
+                                             null);
+        busyTree.setAllowedDragSources(asList(Triple.of(notStartedTree, x -> startSaleDialog(notStartedTree.getSelectedClusterId()), x -> {}),
+                                              Triple.of(partlyDoneTree, x -> true, x -> {}),
+                                              Triple.of(doneTree, x -> true, x -> {})),
+                                       this::updateBusySaleDialog);
+        partlyDoneTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> true, x -> {})),
+                                             null);
+        doneTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> true, x -> {})),
+                                       null);
 
         openedSale.getChildren().addAll(notStarted, busy, done);
     }
@@ -251,16 +258,32 @@ public class SaleOverviewView extends AbstractView {
         return false;
     }
 
-    private boolean updateBusySaleDialog(ClusterId clusterId) {
+    private void updateBusySaleDialog(ClusterId clusterId) {
         StartSaleDialog dialog = new StartSaleDialog(this::message, presenter.getClusterFor(clusterId), presenter.getBusySaleFor(clusterId));
         dialog.initModality(WINDOW_MODAL);
         dialog.initOwner(mainStage);
         Optional<StartSale> updateSale = dialog.showAndWait();
 
-        if (updateSale.isPresent()) {
-            presenter.updateSale(clusterId, updateSale.get());
-            return true;
-        }
-        return false;
+        updateSale.ifPresent(startSale -> presenter.updateSale(clusterId, startSale));
+    }
+
+    private boolean undoStart() {
+        ButtonType yes = new ButtonType(message(YES), ButtonBar.ButtonData.YES);
+        ButtonType no = new ButtonType(message(NO), ButtonBar.ButtonData.NO);
+        Alert dialog = new Alert(CONFIRMATION, "", yes, no);
+        dialog.setTitle(message(ARE_YOU_SURE));
+        dialog.setHeaderText(null);
+        dialog.setContentText(message(REMOVE_BUSY));
+        dialog.initModality(WINDOW_MODAL);
+        dialog.initOwner(mainStage);
+
+        return dialog.showAndWait()
+                     .map(ButtonType::getButtonData)
+                     .orElse(OTHER)
+                     .equals(ButtonBar.ButtonData.YES);
+    }
+
+    private void undoStart(ClusterDto clusterDto) {
+        presenter.undoStart(clusterDto.id);
     }
 }
