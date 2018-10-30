@@ -80,6 +80,18 @@ public class ClusterState extends AbstractEntity<ClusterStateId> {
         this.sales = new HashSet<>(s);
     }
 
+    public void addStreetDone(Street street) {
+        Collection<Street> sd = streetsDone();
+        sd.add(street);
+        this.streetsDone = new HashSet<>(sd);
+    }
+
+    public void removeStreetDone(Street street) {
+        Collection<Street> sd = streetsDone();
+        sd.remove(street);
+        this.streetsDone = new HashSet<>(sd);
+    }
+
     @Override
     public String toString() {
         return "ClusterState{" +

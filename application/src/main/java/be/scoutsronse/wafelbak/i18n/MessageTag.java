@@ -41,5 +41,13 @@ public enum MessageTag {
     START_TIME,
     START_SALE_TITLE,
     SAVE,
-    REMOVE_BUSY
+    REMOVE_BUSY,
+    AMOUNT_BACK,
+    INITIAL_AMOUNT,
+    MONEY_IN,
+    MONEY_LIMITS,
+    END_TIME,
+    DONE_STREETS,
+    END_SALE_TITLE,
+    END
 }

@@ -1,3 +1,8 @@
 .accordion {
     -fx-background-color: #F4F4F4;
 }
+
+.text-field:error {
+    -fx-text-box-border: red ;
+    -fx-focus-color: red ;
+}

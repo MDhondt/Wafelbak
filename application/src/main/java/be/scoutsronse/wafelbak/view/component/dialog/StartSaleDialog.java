@@ -23,6 +23,7 @@ import java.util.function.UnaryOperator;
 
 import static be.scoutsronse.wafelbak.i18n.MessageTag.*;
 import static java.lang.Double.MAX_VALUE;
+import static java.lang.Integer.parseInt;
 import static java.lang.String.join;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.Arrays.asList;
@@ -35,6 +36,7 @@ import static javafx.scene.layout.Priority.ALWAYS;
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+@SuppressWarnings("Duplicates")
 public class StartSaleDialog extends Dialog<StartSale> {
 
     private final GridPane grid;
@@ -115,7 +117,7 @@ public class StartSaleDialog extends Dialog<StartSale> {
         setResultConverter(dialogButton -> {
             ButtonBar.ButtonData data = dialogButton == null ? null : dialogButton.getButtonData();
             if (data == OK_DONE) {
-                return new StartSale(Integer.parseInt(amountField.getEditor().getText()),
+                return new StartSale(parseInt(amountField.getEditor().getText()),
                                      salesManField.getText(),
                                      contactField.getText(),
                                      asList(teamField.getText().split("\n")),
@@ -148,7 +150,7 @@ public class StartSaleDialog extends Dialog<StartSale> {
     private ChangeListener getListener(DialogPane dialogPane, ButtonType startButton) {
         return (observable, oldValue, newValue) -> {
             if (dialogPane.lookupButton(startButton) != null) {
-                if (!isBlank(salesManField.getText()) && amountField.getValue() > 0) {
+                if (!isBlank(salesManField.getText()) && parseInt(amountField.getEditor().getText()) > 0) {
                     try {
                         LocalTime.parse(startTimeField.getText(), ofPattern("HH:mm"));
                         dialogPane.lookupButton(startButton).setDisable(false);

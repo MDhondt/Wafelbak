@@ -17,6 +17,7 @@ public class WafelbakConfig {
     public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasename("i18n/wafelbak");
+        messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
 }

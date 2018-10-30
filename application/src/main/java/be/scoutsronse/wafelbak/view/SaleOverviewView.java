@@ -1,9 +1,11 @@
 package be.scoutsronse.wafelbak.view;
 
 import be.scoutsronse.wafelbak.domain.dto.ClusterDto;
+import be.scoutsronse.wafelbak.domain.dto.dialog.EndSale;
 import be.scoutsronse.wafelbak.domain.dto.dialog.StartSale;
 import be.scoutsronse.wafelbak.domain.id.ClusterId;
 import be.scoutsronse.wafelbak.presenter.SaleOverviewPresenter;
+import be.scoutsronse.wafelbak.view.component.dialog.EndSaleDialog;
 import be.scoutsronse.wafelbak.view.component.dialog.StartSaleDialog;
 import be.scoutsronse.wafelbak.view.component.treeview.SearchableClusterTreeView;
 import javafx.scene.control.*;
@@ -217,9 +219,9 @@ public class SaleOverviewView extends AbstractView {
                                               Triple.of(partlyDoneTree, x -> true, x -> {}),
                                               Triple.of(doneTree, x -> true, x -> {})),
                                        this::updateBusySaleDialog);
-        partlyDoneTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> true, x -> {})),
+        partlyDoneTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> endSaleDialog(busyTree.getSelectedClusterId(), false), x -> {})),
                                              null);
-        doneTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> true, x -> {})),
+        doneTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> endSaleDialog(busyTree.getSelectedClusterId(), true), x -> {})),
                                        null);
 
         openedSale.getChildren().addAll(notStarted, busy, done);
@@ -265,6 +267,19 @@ public class SaleOverviewView extends AbstractView {
         Optional<StartSale> updateSale = dialog.showAndWait();
 
         updateSale.ifPresent(startSale -> presenter.updateSale(clusterId, startSale));
+    }
+
+    private boolean endSaleDialog(ClusterId selectedClusterId, boolean fullyDone) {
+        EndSaleDialog dialog = new EndSaleDialog(this::message, presenter.getClusterFor(selectedClusterId), !fullyDone);
+        dialog.initModality(WINDOW_MODAL);
+        dialog.initOwner(mainStage);
+        Optional<EndSale> endSale = dialog.showAndWait();
+
+        if (endSale.isPresent()) {
+            presenter.endSale(selectedClusterId, endSale.get(), fullyDone ? DONE : PARTLY_DONE);
+            return true;
+        }
+        return false;
     }
 
     private boolean undoStart() {

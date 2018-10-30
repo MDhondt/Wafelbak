@@ -2,6 +2,7 @@ package be.scoutsronse.wafelbak.presenter;
 
 import be.scoutsronse.wafelbak.domain.ClusterStatus;
 import be.scoutsronse.wafelbak.domain.dto.ClusterDto;
+import be.scoutsronse.wafelbak.domain.dto.dialog.EndSale;
 import be.scoutsronse.wafelbak.domain.dto.dialog.StartSale;
 import be.scoutsronse.wafelbak.domain.entity.Cluster;
 import be.scoutsronse.wafelbak.domain.entity.ClusterState;
@@ -12,6 +13,7 @@ import be.scoutsronse.wafelbak.domain.id.StreetId;
 import be.scoutsronse.wafelbak.repository.ClusterRepository;
 import be.scoutsronse.wafelbak.repository.ClusterStateRepository;
 import be.scoutsronse.wafelbak.repository.SaleRepository;
+import be.scoutsronse.wafelbak.repository.StreetRepository;
 import be.scoutsronse.wafelbak.service.OpenedSaleService;
 import be.scoutsronse.wafelbak.view.SaleOverviewView;
 import be.scoutsronse.wafelbak.view.component.AccordionPane;
@@ -49,6 +51,8 @@ public class SaleOverviewPresenter {
     private ClusterStateRepository clusterStateRepository;
     @Inject
     private SaleRepository saleRepository;
+    @Inject
+    private StreetRepository streetRepository;
     @Inject
     private OpenedSaleService openedSaleService;
     @Inject
@@ -151,8 +155,8 @@ public class SaleOverviewPresenter {
         ClusterState state = cluster.states().stream()
                                     .filter(s -> s.year().equals(openedSaleService.getCurrentYear()))
                                     .findFirst().get();
-        Pair<List<StreetId>, Color> done = Pair.of(state.streetsDone().stream().map(Street::id).collect(toList()), getDoneColour().get());
-        Pair<List<StreetId>, Color> notDone = Pair.of(cluster.streets().stream().map(Street::id).filter(not(done.getLeft()::contains)).collect(toList()), getNotStartedColour().get());
+        Pair<List<StreetId>, Color> done = Pair.of(state.streetsDone().stream().map(Street::id).filter(streets::contains).collect(toList()), getDoneColour().get());
+        Pair<List<StreetId>, Color> notDone = Pair.of(cluster.streets().stream().map(Street::id).filter(not(done.getLeft()::contains)).filter(streets::contains).collect(toList()), getNotStartedColour().get());
 
         mapPresenter.selectStreets(asList(done, notDone));
     }
@@ -230,5 +234,23 @@ public class SaleOverviewPresenter {
             saleRepository.delete(sale);
             saleRepository.flush();
         } catch (Exception e) {}
+    }
+
+    public void endSale(ClusterId clusterId, EndSale endSale, ClusterStatus clusterStatus) {
+        Cluster cluster = clusterRepository.findById(clusterId.value()).get();
+        ClusterState clusterState = cluster.states().stream()
+                                           .filter(state -> state.year().equals(openedSaleService.getCurrentYear()))
+                                           .findFirst().get();
+        Sale currentSale = clusterState.sales().stream().sorted(comparing(Sale::start).reversed()).findFirst().get();
+        List<Street> doneStreets = endSale.getDoneStreets().stream().map(streetRepository::findById).filter(Optional::isPresent).map(Optional::get).collect(toList());
+        currentSale.setAmount(endSale.getActualAmountSold());
+        currentSale.setMoney(endSale.getMoney());
+        currentSale.setEnd(endSale.getEndTime());
+        currentSale.setStreets(doneStreets);
+        clusterState.setStatus(clusterStatus);
+        doneStreets.forEach(clusterState::addStreetDone);
+
+        saleRepository.save(currentSale);
+        clusterStateRepository.saveAndFlush(clusterState);
     }
 }
