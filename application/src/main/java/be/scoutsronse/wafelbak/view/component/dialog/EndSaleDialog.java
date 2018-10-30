@@ -133,6 +133,22 @@ public class EndSaleDialog extends Dialog<EndSale> {
         runLater(() -> validationListener.changed(null, null, null));
     }
 
+    public EndSaleDialog(BiFunction<MessageTag, Object[], String> messageSource, Cluster cluster, EndSale endSale) {
+        this(messageSource, cluster, false);
+        amountBackField.setText("0");
+        moneyField.setText(endSale.getMoney().toString());
+        endField.setText(endSale.getEndTime().toLocalTime().format(ofPattern("HH:mm")));
+
+        ButtonType updateButton = new ButtonType(messageSource.apply(SAVE, new Object[0]), OK_DONE);
+        ButtonType cancelButton = new ButtonType(messageSource.apply(CANCEL, new Object[0]), CANCEL_CLOSE);
+        ChangeListener validationListener = getListener(getDialogPane(), updateButton);
+        amountBackField.textProperty().addListener(validationListener);
+        moneyField.textProperty().addListener(validationListener);
+        endField.textProperty().addListener(validationListener);
+        getDialogPane().getButtonTypes().clear();
+        getDialogPane().getButtonTypes().addAll(updateButton, cancelButton);
+    }
+
     private ChangeListener getListener(DialogPane dialogPane, ButtonType endButton) {
         return (observable, oldValue, newValue) -> {
             if (dialogPane.lookupButton(endButton) != null) {

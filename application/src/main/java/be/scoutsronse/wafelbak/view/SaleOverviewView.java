@@ -106,6 +106,8 @@ public class SaleOverviewView extends AbstractView {
         openedSale = new VBox(40);
         openedSale.setAlignment(TOP_CENTER);
 
+        openedSale.setOnMouseClicked(event -> presenter.selectAll());
+
         HBox notStarted = new HBox();
         notStarted.setAlignment(CENTER);
 
@@ -216,13 +218,12 @@ public class SaleOverviewView extends AbstractView {
         notStartedTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> undoStart(), this::undoStart)),
                                              null);
         busyTree.setAllowedDragSources(asList(Triple.of(notStartedTree, x -> startSaleDialog(notStartedTree.getSelectedClusterId()), x -> {}),
-                                              Triple.of(partlyDoneTree, x -> true, x -> {}),
-                                              Triple.of(doneTree, x -> true, x -> {})),
+                                              Triple.of(partlyDoneTree, x -> startSaleDialog(partlyDoneTree.getSelectedClusterId()), x -> {})),
                                        this::updateBusySaleDialog);
         partlyDoneTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> endSaleDialog(busyTree.getSelectedClusterId(), false), x -> {})),
                                              null);
         doneTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> endSaleDialog(busyTree.getSelectedClusterId(), true), x -> {})),
-                                       null);
+                                       this::updateDoneSaleDialog);
 
         openedSale.getChildren().addAll(notStarted, busy, done);
     }
@@ -267,6 +268,15 @@ public class SaleOverviewView extends AbstractView {
         Optional<StartSale> updateSale = dialog.showAndWait();
 
         updateSale.ifPresent(startSale -> presenter.updateSale(clusterId, startSale));
+    }
+
+    private void updateDoneSaleDialog(ClusterId clusterId) {
+        EndSaleDialog dialog = new EndSaleDialog(this::message, presenter.getClusterFor(clusterId), presenter.getEndSaleFor(clusterId));
+        dialog.initModality(WINDOW_MODAL);
+        dialog.initOwner(mainStage);
+        Optional<EndSale> updateSale = dialog.showAndWait();
+
+        updateSale.ifPresent(endSale -> presenter.updateSale(clusterId, endSale));
     }
 
     private boolean endSaleDialog(ClusterId selectedClusterId, boolean fullyDone) {

@@ -26,12 +26,9 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import static be.scoutsronse.wafelbak.domain.ClusterStatus.BUSY;
-import static be.scoutsronse.wafelbak.domain.ClusterStatus.NOT_STARTED;
+import static be.scoutsronse.wafelbak.domain.ClusterStatus.*;
 import static be.scoutsronse.wafelbak.tech.util.Collectors.toReversedList;
 import static be.scoutsronse.wafelbak.tech.util.PredicateUtils.not;
 import static java.lang.System.getProperty;
@@ -39,7 +36,9 @@ import static java.time.LocalDate.now;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.Comparator.comparing;
+import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.lang3.tuple.Pair.of;
 
 @Component
@@ -137,18 +136,43 @@ public class SaleOverviewPresenter {
     }
 
     public void selectNotStartedStreets(Collection<StreetId> streets) {
-        mapPresenter.selectStreets(singletonList(of(streets, getNotStartedColour().get())));
+        mapPresenter.selectStreets(findNotStartedStreets(streets));
     }
 
     public void selectBusyStreets(Collection<StreetId> streets) {
-        mapPresenter.selectStreets(singletonList(of(streets, getBusyColour().get())));
+        mapPresenter.selectStreets(findBusyStreets(streets));
     }
 
     public void selectDoneStreets(Collection<StreetId> streets) {
-        mapPresenter.selectStreets(singletonList(of(streets, getDoneColour().get())));
+        mapPresenter.selectStreets(findDoneStreets(streets));
     }
 
     public void selectPartlyDoneStreets(Collection<StreetId> streets) {
+        mapPresenter.selectStreets(findPartlyDoneStreets(streets));
+    }
+
+    private Collection<Pair<? extends Collection<StreetId>, Color>> findNotStartedStreets(Collection<StreetId> streets) {
+        return singletonList(of(streets, getNotStartedColour().get()));
+    }
+
+    private Collection<Pair<? extends Collection<StreetId>, Color>> findBusyStreets(Collection<StreetId> streets) {
+        Cluster cluster = clusterRepository.findAll().stream()
+                                           .filter(clstr -> clstr.streets().stream().map(Street::id).anyMatch(streets::contains))
+                                           .findFirst().get();
+        ClusterState state = cluster.states().stream()
+                                    .filter(s -> s.year().equals(openedSaleService.getCurrentYear()))
+                                    .findFirst().get();
+        Pair<List<StreetId>, Color> done = Pair.of(state.streetsDone().stream().map(Street::id).filter(streets::contains).collect(toList()), getDoneColour().get());
+        Pair<List<StreetId>, Color> notDone = Pair.of(cluster.streets().stream().map(Street::id).filter(not(done.getLeft()::contains)).filter(streets::contains).collect(toList()), getBusyColour().get());
+
+        return asList(done, notDone);
+    }
+
+    private Collection<Pair<? extends Collection<StreetId>, Color>> findDoneStreets(Collection<StreetId> streets) {
+        return singletonList(of(streets, getDoneColour().get()));
+    }
+
+    private Collection<Pair<? extends Collection<StreetId>, Color>> findPartlyDoneStreets(Collection<StreetId> streets) {
         Cluster cluster = clusterRepository.findAll().stream()
                                            .filter(clstr -> clstr.streets().stream().map(Street::id).anyMatch(streets::contains))
                                            .findFirst().get();
@@ -158,7 +182,24 @@ public class SaleOverviewPresenter {
         Pair<List<StreetId>, Color> done = Pair.of(state.streetsDone().stream().map(Street::id).filter(streets::contains).collect(toList()), getDoneColour().get());
         Pair<List<StreetId>, Color> notDone = Pair.of(cluster.streets().stream().map(Street::id).filter(not(done.getLeft()::contains)).filter(streets::contains).collect(toList()), getNotStartedColour().get());
 
-        mapPresenter.selectStreets(asList(done, notDone));
+        return asList(done, notDone);
+    }
+
+    public void selectAll() {
+        Map<Cluster, ClusterState> statesByCluster = clusterRepository.findAll().stream().collect(toMap(identity(), cluster -> cluster.states().stream().filter(s -> s.year().equals(openedSaleService.getCurrentYear())).findFirst().get()));
+        Collection<Pair<? extends Collection<StreetId>, Color>> groups = new ArrayList<>();
+        for (Map.Entry<Cluster, ClusterState> clusterAndState : statesByCluster.entrySet()) {
+            if (clusterAndState.getValue().status().equals(NOT_STARTED)) {
+                groups.addAll(findNotStartedStreets(clusterAndState.getKey().streets().stream().map(Street::id).collect(toList())));
+            } else if (clusterAndState.getValue().status().equals(BUSY)) {
+                groups.addAll(findBusyStreets(clusterAndState.getKey().streets().stream().map(Street::id).collect(toList())));
+            } else if (clusterAndState.getValue().status().equals(PARTLY_DONE)) {
+                groups.addAll(findPartlyDoneStreets(clusterAndState.getKey().streets().stream().map(Street::id).collect(toList())));
+            } else {
+                groups.addAll(findDoneStreets(clusterAndState.getKey().streets().stream().map(Street::id).collect(toList())));
+            }
+        }
+        mapPresenter.selectStreets(groups);
     }
 
     public Cluster getClusterFor(ClusterId selectedClusterId) {
@@ -205,13 +246,35 @@ public class SaleOverviewPresenter {
         saleRepository.saveAndFlush(currentSale);
     }
 
+    public void updateSale(ClusterId clusterId, EndSale updatedSale) {
+        Cluster cluster = clusterRepository.findById(clusterId.value()).get();
+        ClusterState clusterState = cluster.states().stream()
+                                           .filter(state -> state.year().equals(openedSaleService.getCurrentYear()))
+                                           .findFirst().get();
+        Sale currentSale = clusterState.sales().stream().sorted(comparing(Sale::start).reversed()).findFirst().get();
+        currentSale.setAmount(updatedSale.getActualAmountSold());
+        currentSale.setEnd(updatedSale.getEndTime());
+        currentSale.setMoney(updatedSale.getMoney());
+
+        saleRepository.saveAndFlush(currentSale);
+    }
+
     public StartSale getBusySaleFor(ClusterId clusterId) {
         Cluster cluster = clusterRepository.findById(clusterId.value()).get();
         ClusterState clusterState = cluster.states().stream()
                                            .filter(state -> state.year().equals(openedSaleService.getCurrentYear()))
                                            .findFirst().get();
-        Sale sale = clusterState.sales().stream().sorted(comparing(Sale::start)).findFirst().get();
+        Sale sale = clusterState.sales().stream().sorted(comparing(Sale::start).reversed()).findFirst().get();
         return new StartSale(sale.amount(), sale.salesMan(), sale.contact(), sale.salesTeam(), sale.start().toLocalTime());
+    }
+
+    public EndSale getEndSaleFor(ClusterId clusterId) {
+        Cluster cluster = clusterRepository.findById(clusterId.value()).get();
+        ClusterState clusterState = cluster.states().stream()
+                                           .filter(state -> state.year().equals(openedSaleService.getCurrentYear()))
+                                           .findFirst().get();
+        Sale sale = clusterState.sales().stream().sorted(comparing(Sale::start).reversed()).findFirst().get();
+        return new EndSale(sale.amount(), sale.money(), sale.end().toLocalTime(), sale.streets().stream().map(Street::id).collect(toList()));
     }
 
     public void undoStart(ClusterId id) {
