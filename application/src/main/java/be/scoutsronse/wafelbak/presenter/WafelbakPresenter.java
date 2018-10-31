@@ -15,6 +15,8 @@ public class WafelbakPresenter {
     @Inject
     private SaleOverviewPresenter saleOverviewPresenter;
     @Inject
+    private DetailsPresenter detailsPresenter;
+    @Inject
     private SettingsPresenter settingsPresenter;
     @Inject
     private MapPresenter mapPresenter;
@@ -31,10 +33,12 @@ public class WafelbakPresenter {
         mapPresenter.init();
         streetOverviewPresenter.init();
         saleOverviewPresenter.init(mainStage);
+        detailsPresenter.init();
         settingsPresenter.init();
 
         view.addLeftTools(streetOverviewPresenter.pane(),
                           saleOverviewPresenter.pane(),
+                          detailsPresenter.pane(),
                           settingsPresenter.pane());
         view.addMap(mapPresenter.getMap());
 
