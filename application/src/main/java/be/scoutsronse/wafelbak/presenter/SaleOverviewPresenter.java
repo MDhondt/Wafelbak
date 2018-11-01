@@ -4,20 +4,16 @@ import be.scoutsronse.wafelbak.domain.ClusterStatus;
 import be.scoutsronse.wafelbak.domain.dto.ClusterDto;
 import be.scoutsronse.wafelbak.domain.dto.dialog.EndSale;
 import be.scoutsronse.wafelbak.domain.dto.dialog.StartSale;
-import be.scoutsronse.wafelbak.domain.entity.Cluster;
-import be.scoutsronse.wafelbak.domain.entity.ClusterState;
-import be.scoutsronse.wafelbak.domain.entity.Sale;
-import be.scoutsronse.wafelbak.domain.entity.Street;
+import be.scoutsronse.wafelbak.domain.entity.*;
 import be.scoutsronse.wafelbak.domain.id.ClusterId;
 import be.scoutsronse.wafelbak.domain.id.StreetId;
-import be.scoutsronse.wafelbak.repository.ClusterRepository;
-import be.scoutsronse.wafelbak.repository.ClusterStateRepository;
-import be.scoutsronse.wafelbak.repository.SaleRepository;
-import be.scoutsronse.wafelbak.repository.StreetRepository;
+import be.scoutsronse.wafelbak.repository.*;
 import be.scoutsronse.wafelbak.service.OpenedSaleService;
 import be.scoutsronse.wafelbak.view.SaleOverviewView;
 import be.scoutsronse.wafelbak.view.component.AccordionPane;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.scene.control.TitledPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.tuple.Pair;
@@ -49,6 +45,8 @@ public class SaleOverviewPresenter {
     @Inject
     private ClusterStateRepository clusterStateRepository;
     @Inject
+    private UndocumentedSaleRepository undocumentedSaleRepository;
+    @Inject
     private SaleRepository saleRepository;
     @Inject
     private StreetRepository streetRepository;
@@ -71,7 +69,9 @@ public class SaleOverviewPresenter {
     }
 
     public AccordionPane pane() {
-        return new AccordionPane(view.getPane());
+        ChangeListener<TitledPane> expansionListener = null;
+        ChangeListener<TitledPane> collapseListener = (observable, oldValue, newValue) -> view.clearSelection();
+        return new AccordionPane(view.getPane(), expansionListener, collapseListener);
     }
 
     public boolean startNewSale() {
@@ -93,6 +93,8 @@ public class SaleOverviewPresenter {
             ClusterState newState = cluster.addNewState(year);
             clusterStateRepository.save(newState);
         });
+        UndocumentedSale undocumentedSale = new UndocumentedSale(year.shortValue());
+        undocumentedSaleRepository.save(undocumentedSale);
         clusterRepository.saveAll(allClusters);
         openedSaleService.setCurrentYear(year);
         return true;

@@ -27,6 +27,7 @@ import static be.scoutsronse.wafelbak.tech.util.ConsumerUtils.combine;
 import static java.time.LocalDate.now;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
+import static java.util.Optional.ofNullable;
 import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
@@ -42,6 +43,7 @@ public class SaleOverviewView extends AbstractView {
     private VBox unopenedSale;
     private VBox openedSale;
     private Stage mainStage;
+    SearchableClusterTreeView notStartedTree, busyTree, partlyDoneTree, doneTree;
 
     public SaleOverviewView(SaleOverviewPresenter presenter, MessageSource messageSource, Stage mainStage) {
         super(messageSource);
@@ -119,7 +121,7 @@ public class SaleOverviewView extends AbstractView {
         DropShadow shadow = new DropShadow(5, 1, 1, BLACK);
         notStartedRectangle.setEffect(shadow);
 
-        SearchableClusterTreeView notStartedTree = new SearchableClusterTreeView(presenter::selectNotStartedStreets);
+        notStartedTree = new SearchableClusterTreeView(presenter::selectNotStartedStreets);
         notStartedTree.setContentOpacity(0.8);
         notStartedTree.setContent(presenter.getClustersFor(NOT_STARTED));
         notStartedTree.minHeightProperty().bind(notStartedRectangle.heightProperty().subtract(6));
@@ -145,7 +147,7 @@ public class SaleOverviewView extends AbstractView {
         busyRectangle.setArcWidth(10);
         busyRectangle.setEffect(shadow);
 
-        SearchableClusterTreeView busyTree = new SearchableClusterTreeView(presenter::selectBusyStreets);
+        busyTree = new SearchableClusterTreeView(presenter::selectBusyStreets);
         busyTree.setContentOpacity(0.8);
         busyTree.setContent(presenter.getClustersFor(BUSY));
         busyTree.minHeightProperty().bind(busyRectangle.heightProperty().subtract(6));
@@ -171,7 +173,7 @@ public class SaleOverviewView extends AbstractView {
         partlyDoneRectangle.setArcWidth(10);
         partlyDoneRectangle.setEffect(shadow);
 
-        SearchableClusterTreeView partlyDoneTree = new SearchableClusterTreeView(null);
+        partlyDoneTree = new SearchableClusterTreeView(null);
         partlyDoneTree.setContentOpacity(0.8);
         partlyDoneTree.setContent(presenter.getClustersFor(PARTLY_DONE));
         partlyDoneTree.minHeightProperty().bind(busyRectangle.heightProperty().subtract(6));
@@ -193,7 +195,7 @@ public class SaleOverviewView extends AbstractView {
         doneRectangle.setArcWidth(10);
         doneRectangle.setEffect(shadow);
 
-        SearchableClusterTreeView doneTree = new SearchableClusterTreeView(presenter::selectDoneStreets);
+        doneTree = new SearchableClusterTreeView(presenter::selectDoneStreets);
         doneTree.setContentOpacity(0.8);
         doneTree.setContent(presenter.getClustersFor(DONE));
         doneTree.minHeightProperty().bind(busyRectangle.heightProperty().subtract(6));
@@ -310,5 +312,12 @@ public class SaleOverviewView extends AbstractView {
 
     private void undoStart(ClusterDto clusterDto) {
         presenter.undoStart(clusterDto.id);
+    }
+
+    public void clearSelection() {
+        ofNullable(notStartedTree).ifPresent(SearchableClusterTreeView::clearSelection);
+        ofNullable(busyTree).ifPresent(SearchableClusterTreeView::clearSelection);
+        ofNullable(partlyDoneTree).ifPresent(SearchableClusterTreeView::clearSelection);
+        ofNullable(doneTree).ifPresent(SearchableClusterTreeView::clearSelection);
     }
 }
