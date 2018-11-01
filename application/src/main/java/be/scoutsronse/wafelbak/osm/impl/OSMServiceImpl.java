@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -36,8 +35,7 @@ class OSMServiceImpl implements OSMService {
     private final OSM ronse;
 
     private OSMServiceImpl() {
-        File ronseInput = new File(getClass().getResource("/ronse.osm").getFile());
-        ronse = parse(ronseInput);
+        ronse = parse(getClass().getResourceAsStream("/ronse.osm"));
     }
 
     @Override

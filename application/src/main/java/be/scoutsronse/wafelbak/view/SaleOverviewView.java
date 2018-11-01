@@ -41,7 +41,7 @@ public class SaleOverviewView extends AbstractView {
     private SaleOverviewPresenter presenter;
     private TitledPane pane;
     private VBox unopenedSale;
-    private VBox openedSale;
+    private ScrollPane openedSale = new ScrollPane();
     private Stage mainStage;
     SearchableClusterTreeView notStartedTree, busyTree, partlyDoneTree, doneTree;
 
@@ -105,10 +105,10 @@ public class SaleOverviewView extends AbstractView {
     }
 
     private void populateOpenSale() {
-        openedSale = new VBox(40);
-        openedSale.setAlignment(TOP_CENTER);
+        VBox openedSaleVbox = new VBox(40);
+        openedSaleVbox.setAlignment(TOP_CENTER);
 
-        openedSale.setOnMouseClicked(event -> presenter.selectAll());
+        openedSaleVbox.setOnMouseClicked(event -> presenter.selectAll());
 
         HBox notStarted = new HBox();
         notStarted.setAlignment(CENTER);
@@ -227,7 +227,9 @@ public class SaleOverviewView extends AbstractView {
         doneTree.setAllowedDragSources(singletonList(Triple.of(busyTree, x -> endSaleDialog(busyTree.getSelectedClusterId(), true), x -> {})),
                                        this::updateDoneSaleDialog);
 
-        openedSale.getChildren().addAll(notStarted, busy, done);
+        openedSaleVbox.getChildren().addAll(notStarted, busy, done);
+        openedSale.setContent(openedSaleVbox);
+        openedSale.setFitToWidth(true);
     }
 
     public TitledPane getPane() {
