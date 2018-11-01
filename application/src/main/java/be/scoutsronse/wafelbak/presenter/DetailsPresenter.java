@@ -1,10 +1,7 @@
 package be.scoutsronse.wafelbak.presenter;
 
 import be.scoutsronse.wafelbak.domain.dto.ClusterDetail;
-import be.scoutsronse.wafelbak.domain.entity.Cluster;
-import be.scoutsronse.wafelbak.domain.entity.ClusterState;
-import be.scoutsronse.wafelbak.domain.entity.Sale;
-import be.scoutsronse.wafelbak.domain.entity.Street;
+import be.scoutsronse.wafelbak.domain.entity.*;
 import be.scoutsronse.wafelbak.domain.id.ClusterId;
 import be.scoutsronse.wafelbak.repository.ClusterRepository;
 import be.scoutsronse.wafelbak.repository.UndocumentedSaleRepository;
@@ -14,6 +11,8 @@ import be.scoutsronse.wafelbak.view.component.AccordionPane;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.TitledPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
@@ -47,8 +46,8 @@ public class DetailsPresenter {
 
     private DetailsView view;
 
-    void init() {
-        view = new DetailsView(this, messageSource);
+    void init(Stage mainStage) {
+        view = new DetailsView(this, messageSource, mainStage);
     }
 
     public AccordionPane pane() {
@@ -79,5 +78,15 @@ public class DetailsPresenter {
             Color colour = settingsPresenter.getStreetOverviewColour();
             mapPresenter.selectStreets(singletonList(of(cluster.get().streets().stream().map(Street::id).collect(toList()), colour)));
         }
+    }
+
+    public void addUndocumentedSale(Pair<Integer, Float> input) {
+        Optional<UndocumentedSale> sale = undocumentedSaleRepository.findByYear(openedSaleService.getCurrentYear().shortValue());
+        sale.ifPresent(us -> {
+            us.setAmount((short) (us.getAmount() + input.getLeft()));
+            us.setMoney(us.getMoney() + input.getRight());
+            undocumentedSaleRepository.saveAndFlush(us);
+            view.populate(getDetails(), us);
+        });
     }
 }

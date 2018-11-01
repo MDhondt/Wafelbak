@@ -3,28 +3,34 @@ package be.scoutsronse.wafelbak.view;
 import be.scoutsronse.wafelbak.domain.dto.ClusterDetail;
 import be.scoutsronse.wafelbak.domain.entity.UndocumentedSale;
 import be.scoutsronse.wafelbak.presenter.DetailsPresenter;
+import be.scoutsronse.wafelbak.view.component.dialog.UndocumentedSaleDialog;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.context.MessageSource;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Optional;
 
 import static be.scoutsronse.wafelbak.i18n.MessageTag.*;
 import static java.lang.Double.MAX_VALUE;
+import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.geometry.Pos.CENTER_LEFT;
+import static javafx.stage.Modality.WINDOW_MODAL;
 
 public class DetailsView extends AbstractView {
 
     private DetailsPresenter presenter;
     private TitledPane pane;
     private VBox content;
+    private Stage mainStage;
     private TableView<ClusterDetail> table;
-    private ObservableList<ClusterDetail> tableContent = FXCollections.observableArrayList();
+    private ObservableList<ClusterDetail> tableContent = observableArrayList();
     private Label totalAmount = new Label("0");
     private Label totalMoney = new Label("0");
     private Label totalLooseAmount = new Label("0");
@@ -32,9 +38,10 @@ public class DetailsView extends AbstractView {
     private Label totalSaleAmount = new Label("0");
     private Label totalSaleMoney = new Label("0");
 
-    public DetailsView(DetailsPresenter presenter, MessageSource messageSource) {
+    public DetailsView(DetailsPresenter presenter, MessageSource messageSource, Stage mainStage) {
         super(messageSource);
         this.presenter = presenter;
+        this.mainStage = mainStage;
 
         content = new VBox(10);
 
@@ -57,6 +64,14 @@ public class DetailsView extends AbstractView {
         grid.add(totalMoney, 1, 5);
 
         Button add = new Button(message(ADD));
+        add.setOnMouseReleased(event -> {
+            UndocumentedSaleDialog dialog = new UndocumentedSaleDialog(this::message);
+            dialog.initModality(WINDOW_MODAL);
+            dialog.initOwner(mainStage);
+            Optional<Pair<Integer, Float>> sale = dialog.showAndWait();
+
+            sale.ifPresent(presenter::addUndocumentedSale);
+        });
         add.prefHeightProperty().bind(totalLooseAmount.heightProperty().add(totalLooseMoney.heightProperty().add(5)));
         grid.add(add, 2, 2, 1, 2);
 

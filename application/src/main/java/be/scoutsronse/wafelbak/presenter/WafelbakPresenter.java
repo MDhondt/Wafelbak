@@ -33,7 +33,7 @@ public class WafelbakPresenter {
         mapPresenter.init();
         streetOverviewPresenter.init();
         saleOverviewPresenter.init(mainStage);
-        detailsPresenter.init();
+        detailsPresenter.init(mainStage);
         settingsPresenter.init();
 
         view.addLeftTools(streetOverviewPresenter.pane(),

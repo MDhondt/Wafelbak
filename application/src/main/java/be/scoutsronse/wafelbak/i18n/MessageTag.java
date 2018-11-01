@@ -61,5 +61,6 @@ public enum MessageTag {
     END_TIME,
     DONE_STREETS,
     END_SALE_TITLE,
-    END
+    END,
+    LOOSE_TITLE
 }
