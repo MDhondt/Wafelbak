@@ -209,13 +209,19 @@ public class EndSaleDialog extends Dialog<EndSale> {
     }
 
     private Integer minMoneyFor(Integer amount) {
-        int boxes = amount / 25;
-        int per3 = (amount - (25 * boxes)) / 3;
-        int rest = amount - (25 * boxes) - (3 * per3);
-        return 40 * boxes + 5 * per3 + 2 * rest;
+//        int boxes = amount / 25;
+//        int per3 = (amount - (25 * boxes)) / 3;
+//        int rest = amount - (25 * boxes) - (3 * per3);
+//        return 40 * boxes + 5 * per3 + 2 * rest;
+
+        int per2 = amount / 2;
+        int rest = amount - (per2 * 2);
+        return 5 * per2 + 3 * rest;
     }
 
     private Integer maxMoneyFor(Integer amount) {
-        return 2 * amount;
+//        return 2 * amount;
+
+        return 3 * amount;
     }
 }
